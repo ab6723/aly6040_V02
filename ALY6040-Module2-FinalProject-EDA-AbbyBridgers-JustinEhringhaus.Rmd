@@ -21,3 +21,23 @@ p_load(tidyverse)
 ```
 
 ---
+
+## Data Preparation
+
+- Explore the variables, data types, values, etc... 
+
+## Analysis & Interpretation
+
+- Calculate appropriate summary statistics
+- Create appropriate graphs that will give you insights into the data.
+
+Include the answers to following questions:
+
+- What did you do with the data in the context of exploration?
+- How many entries are in the dataset?
+- Was there missing data? Duplications? How clean was the data?
+- Were their outliers or suspicious data?
+- What did you do to clean the data?
+- What did you find? What intrigued you about the data? Why does that matter?
+- What would your proposed next steps be?
+What business questions do you plan to answer with your data mining?
