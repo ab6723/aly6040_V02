@@ -18,7 +18,9 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(pacman)
 p_load(tidyverse)  # usual suite of packages
+p_load(ggthemes)   # extra themes
 p_load(skimr)      # alternative to summary(), skims dataset: skim()
+p_load(VIM)        # visualization of missing values: aggr()
 ```
 ---
 
@@ -28,12 +30,14 @@ p_load(skimr)      # alternative to summary(), skims dataset: skim()
 wvs <- read_csv("../WVS_Cross-National_Wave_7_csv_v4_0.csv")
 ```
 
-```{r subset}
+## Analysis & Interpretation
+
+```{r}
 wvs_subset <- 
   wvs %>% 
   select(
     Country = B_COUNTRY_ALPHA,
-    Longitute = O1_LONGITUDE,
+    Longitude = O1_LONGITUDE,
     Latitude = O2_LATITUDE,
     Age = Q262,
     Income.Group = Q288,
@@ -88,13 +92,48 @@ wvs_subset <-
   )
 ```
 
-```{r exploring}
+```{r}
 skim(wvs_subset)
 ```
 
-...Write about observations of the skim above here...
+...Write about observations of the skim here...
 
-## Analysis & Interpretation
+```{r}
+# Testing this... not working, but just an idea for long/lat values
+p_load(maps)
+map("world")
+points(wvs_subset$Latitude, wvs_subset$Longitude, col = "red", pch = ".", cex = 2)
+```
+
+```{r}
+Religion.names <- c('No Religion', 'Roman Catholic', 'Protestant', 'Orthodox',
+                    'Jew', 'Muslim', 'Hindu', 'Buddhist', 'Other Christian', 'Other')
+
+wvs_subset %>% 
+  ggplot +
+  aes(x = as.factor(Number.Children), fill = as.factor(Religion)) +
+  geom_bar(position = "fill") +
+  scale_fill_discrete(name = "Religious Denomination",
+                      labels = Religion.names) +
+  xlab("Number of Children") +
+  ylab("Proportion") +
+  theme_tufte()
+```
+
+- For almost all counts of children, Muslims proportionally dominate other religious denominations.
+- Those without a religion generally have less, rather than more, children.
+- It appears outliers are present, such as families with 12+ children, this can be checked by running:
+
+```{r}
+table(wvs_subset$Number.Children, wvs_subset$Religion)
+```
+
+
+
+
+---
+
+## TASKS
 
 - Calculate appropriate summary statistics
 - Create appropriate graphs that will give you insights into the data.
