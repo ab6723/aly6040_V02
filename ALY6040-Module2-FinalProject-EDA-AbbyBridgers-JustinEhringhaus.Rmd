@@ -17,9 +17,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 library(pacman)
-library(hrbrthemes)
 p_load(tidyverse)  # usual suite of packages
 p_load(ggthemes)   # extra themes
+p_load(hrbrthemes)
 p_load(skimr)      # alternative to summary(), skims dataset: skim()
 p_load(VIM)        # visualization of missing values: aggr()
 p_load(corrplot)   # visualization of a correlation matrix: corrplot()
@@ -29,7 +29,7 @@ p_load(corrplot)   # visualization of a correlation matrix: corrplot()
 
 ## Data Preparation
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 wvs <- read_csv("../WVS_Cross-National_Wave_7_csv_v4_0.csv")
 head(wvs)[,1:5]
 ```
@@ -78,6 +78,19 @@ skim(wvs_subset)
 ```
 
 ...Write about observations of the skim here...
+
+```{r}
+# getting rid of continuous data
+# only want to count unique values and counts for categorical data
+wvs_subset_categorical <- 
+  wvs_subset %>% 
+  select(-Longitude,
+         -Latitude)
+
+lapply(wvs_subset_categorical, table)
+```
+
+...Write about observations of counts of unique values per variable here...
 
 ```{r}
 # getting rid of nominal data / continuous data
@@ -134,6 +147,8 @@ wvs_subset %>%
 ```{r}
 table(wvs_subset$Number.Children, wvs_subset$Religion)
 ```
+
+- BUT, this data is accurate, and so it may not be wise to consider this an outlier. The dataset is meant to encapsulate human values, the human experience, and actual occurences. So deleting data just because it is outside our view of "what is normal" would, in contrast, skew the data.
 
 ## Analysis & Interpretation - Subset 2
 
