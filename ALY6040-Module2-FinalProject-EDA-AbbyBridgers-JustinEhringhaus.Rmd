@@ -28,9 +28,9 @@ p_load(VIM)        # visualization of missing values: aggr()
 
 ```{r}
 wvs <- read_csv("../WVS_Cross-National_Wave_7_csv_v4_0.csv")
-str(wvs)
+# str(wvs)
+head(wvs)[,1:5]
 ```
-## Analysis & Interpretation
 
 ```{r}
 wvs_subset <- 
@@ -92,6 +92,8 @@ wvs_subset <-
   )
 ```
 
+## Analysis & Interpretation
+
 ```{r}
 skim(wvs_subset)
 ```
@@ -121,15 +123,15 @@ wvs_subset %>%
 ```
 
 - For almost all counts of children, Muslims proportionally dominate other religious denominations.
-- Those without a religion generally have less, rather than more, children.
+- Those without a religion generally have fewer children.
 - It appears outliers are present, such as families with 12+ children, this can be checked by running:
 
 ```{r}
 table(wvs_subset$Number.Children, wvs_subset$Religion)
 ```
 
+## Analysis & Interpretation - Subset 2
 
-# Analysis & Interpretation - Subset 2
 ```{r}
 colnames(wvs_subset)
 wvs_subset2 <- wvs %>% 
@@ -166,6 +168,7 @@ wvs_subset2 <- wvs %>%
 colnames(wvs_subset2)
 skim(wvs_subset2)
 ```
+
 ### v1 plotting // Thurs PM
 # basic barchart
 ggplot(wvs_subset2, aes(x=Confidence.courts, y=Age)) + 
