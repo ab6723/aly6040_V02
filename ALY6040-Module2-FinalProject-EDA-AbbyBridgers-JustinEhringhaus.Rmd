@@ -81,7 +81,6 @@ skim(wvs_subset)
 ```{r}
 # getting rid of nominal data / continuous data
 # only want to assess correlations between ordinal data
-# discluding political / ethical columns 
 wvs_subset_ordinal <- 
   wvs_subset %>% 
   select(-Longitude,
