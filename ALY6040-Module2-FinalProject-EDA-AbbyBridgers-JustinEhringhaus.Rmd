@@ -28,8 +28,8 @@ p_load(VIM)        # visualization of missing values: aggr()
 
 ```{r}
 wvs <- read_csv("../WVS_Cross-National_Wave_7_csv_v4_0.csv")
+str(wvs)
 ```
-
 ## Analysis & Interpretation
 
 ```{r}
@@ -129,6 +129,74 @@ table(wvs_subset$Number.Children, wvs_subset$Religion)
 ```
 
 
+# Analysis & Interpretation - Subset 2
+```{r}
+colnames(wvs_subset)
+wvs_subset2 <- wvs %>% 
+  select(Country = B_COUNTRY_ALPHA,
+    Longitude = O1_LONGITUDE,
+    Latitude = O2_LATITUDE,
+    Settlement.type = H_SETTLEMENT,
+    Country.and.year = S025,
+    Town.size = G_TOWNSIZE2,
+    Age = Q262,
+    Income.group = Q288,
+    Importance.leisure.time = Q3,
+    Importance.work = Q5,
+    Happiness = Q46,
+    Health = Q47,
+    Confidence.elections = Q76,
+    Confidence.courts = Q70,
+    Confidence.UN = Q83,
+    Environment.vs.econgrow = Q111,
+    Job.scarcity.prioritize.nonimmigrants = Q34,
+    Immigration.in.country.fills.useful.jobs = Q122,
+    Immigration.in.country.strengthens.cultural.div = Q123,
+    Immigration.in.country.increases.crime.rate = Q124,
+    Immigration.in.country.gives.political.asylum = Q125,
+    Immigration.in.country.increases.terrorism.risk = Q126,
+    Immigration.in.country.helps.poor.people.est.new.lives = Q127,
+    Immigration.in.country.increases.unemployment = Q128,
+    Immigration.in.country.brings.social.conflict = Q129,
+    Immigration.policy.preference = Q130)
+```
+
+
+```{r}
+colnames(wvs_subset2)
+skim(wvs_subset2)
+```
+### v1 plotting // Thurs PM
+# basic barchart
+ggplot(wvs_subset2, aes(x=Confidence.courts, y=Age)) + 
+  geom_bar(stat = "identity")
+
+# table 
+table()
+
+# likert() function
+#install.packages("HH")
+#library(HH)
+#likert(na.omit(wvs_subset2, Happiness~.))
+#unique(wvs_subset2$Happiness)
+unique(wvs_subset2$Health)
+
+happiness12 <- head(na.omit(wvs_subset2$Happiness, 87000))
+happiness1 <- factor(happiness12,
+                       levels = c("1", "2", "3", "4"),
+                       ordered = TRUE)
+                       
+health12 <- head(na.omit(wvs_subset2$Health, 87000))                     
+health1 <- factor(health12,
+                       levels = c("1", "2", "3", "4", "5"),
+                       ordered = TRUE)
+
+happ.health <- data.frame(happiness1, health1)
+str(happ.health)
+
+x123 = likert(happ.health) ## error here
+
+summary(x123)
 
 
 ---
