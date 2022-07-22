@@ -17,6 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 library(pacman)
+library(hrbrthemes)
 p_load(tidyverse)  # usual suite of packages
 p_load(ggthemes)   # extra themes
 p_load(skimr)      # alternative to summary(), skims dataset: skim()
@@ -167,21 +168,85 @@ wvs_subset2 <- wvs %>%
     Immigration.policy.preference = Q130)
 ```
 
-
+# Checking out the subset
 ```{r}
 colnames(wvs_subset2)
 skim(wvs_subset2)
 ```
 
-### v1 plotting // Thurs PM
+# working on a diverging bar chart...something slightly off but seems to be getting there. Will try to improve Sat and if that doesn't work, will delete
+```{r}
+#install.packages("formattable")
+#library(formattable)
+summary <- wvs_subset2 %>% 
+  group_by(Importance.work, Age) %>% 
+  count(Age = "n1") %>% 
+  group_by(Importance.work) %>% 
+  mutate(percent_resp = n1 / sum(n1)) %>% 
+  ungroup() %>% 
+  mutate(percent_resp_label = percent(n1))
+
+summary
+
+summary %>% 
+  ggplot(aes(x = factor(Importance.work), y = percent_resp, fill = factor(Age))) + geom_col() + geom_text(aes(label = percent_resp_label), position = position_stack(vjust = 0.5),
+                color = "white", fontface = "bold") + coord_flip() + scale_x_discrete() + scale_fill_viridis_d() + labs (title = "Xx", x = NULL, fill = NULL) + theme_minimal() +
+  theme(axis.text.x = element_blank(),
+        axis.title.x = element_blank(),
+        panel.grid = element_blank(),
+        legend.position = "top")
+```
+
 # basic barchart
+```{r}
 ggplot(wvs_subset2, aes(x=Confidence.courts, y=Age)) + 
   geom_bar(stat = "identity")
+```
 
-# table 
-table()
+# age hist
+```{r}
+p <- wvs_subset2 %>%
+  filter( Age>17 ) %>%
+  ggplot( aes(x=Age)) +
+    geom_histogram( binwidth=3, fill="#69b3a2", color="#e9ecef", alpha=0.9) +
+    ggtitle("Bin size = 3") +
+    theme_ipsum() +
+    theme(
+      plot.title = element_text(size=15)
+    )
+p
+```
 
-# likert() function
+# tables & correlation
+```{r}
+table(wvs_subset2$Age, wvs_subset2$Immigration.in.country.brings.social.conflict)
+prop.table(table(wvs_subset2$Age))
+
+data.frame(colnames(wvs_subset2))
+wvs_subset3 <- wvs_subset2[c(-1,-2,-3,-7, -11, -12)]
+str(wvs_subset3)
+cor(wvs_subset3, use = "complete.obs")
+```
+
+# age overlaid with income in prop bar chart
+```{r}
+library(ggthemes)
+Income.details <- c('Lower Step', 'Second Step', 'Third Step', 'Fourth Step', 'Fifth Step', 'Sixth Step', 'Sixth Step', 'Seventh Step', 'Eigth Step', 'Nineth Step', 'Tenth Step', 'Unknown', 'No Answer', 'Not Asked', 'NA')
+
+wvs_subset2 %>% 
+  ggplot +
+  aes(x = Age, fill = factor(Income.group)) +
+  geom_bar(position = "fill") +
+  scale_fill_discrete(name = "Income Group",
+                      labels = Income.details) +
+  xlab("Age") +
+  ylab("Proportion") +
+  ggtitle("Income Group Proportion By Age")
+  theme_hc()
+```
+
+# likert() function -- WIP, will prob delete bc I haven't been able to figure it out :/
+```{r}
 #install.packages("HH")
 #library(HH)
 #likert(na.omit(wvs_subset2, Happiness~.))
@@ -204,7 +269,7 @@ str(happ.health)
 x123 = likert(happ.health) ## error here
 
 summary(x123)
-
+```
 
 ---
 
