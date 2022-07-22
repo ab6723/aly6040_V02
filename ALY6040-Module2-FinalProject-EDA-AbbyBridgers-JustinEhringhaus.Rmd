@@ -7,7 +7,7 @@ output:
 bibliography: "references.bib"
 nocite: '@*'
 ---
-
+ab test 07/22
 ---
 
 ```{r setup, include=FALSE}
@@ -21,14 +21,15 @@ p_load(tidyverse)  # usual suite of packages
 p_load(ggthemes)   # extra themes
 p_load(skimr)      # alternative to summary(), skims dataset: skim()
 p_load(VIM)        # visualization of missing values: aggr()
+p_load(corrplot)   # visualization of a correlation matrix: corrplot()
 ```
+
 ---
 
 ## Data Preparation
 
 ```{r}
 wvs <- read_csv("../WVS_Cross-National_Wave_7_csv_v4_0.csv")
-# str(wvs)
 head(wvs)[,1:5]
 ```
 
@@ -41,7 +42,7 @@ wvs_subset <-
     Latitude = O2_LATITUDE,
     Age = Q262,
     Income.Group = Q288,
-    Ethnic.Group = Q290, # see WVS_codebook.pdf for Q290 coding
+    Ethnic.Group = Q290, # see WVS_codebook.pdf for Q290 coding info
     Immigrant = Q263,
     Religion = Q289,
     Marital.Status = Q273,
@@ -49,47 +50,24 @@ wvs_subset <-
     Number.Children = Q274,
     Happiness = Q46,
     Health = Q47,
-    Political.Engagement = Q209:Q222,
-    Ethical.Values = Q177:Q198,
-  ) %>% 
-  rename(
-    Political.Engagement.signing.petitions = Political.Engagement1, #Q209
-    Political.Engagement.joining.boycotts = Political.Engagement2, #Q210
-    Political.Engagement.attending.demonstrations = Political.Engagement3, #Q211
-    Political.Engagement.joining.strikes = Political.Engagement4, #Q212
-    Political.Engagement.donating.to.campaigns = Political.Engagement5, #Q213
-    Political.Engagement.contacting.gov.officials = Political.Engagement6, #Q214
-    Political.Engagement.encouraging.action.others = Political.Engagement7, #Q215
-    Political.Engagement.encouraging.voting.others = Political.Engagement8, #Q216
-    Political.Engagement.searching.political.info = Political.Engagement9, #Q217
-    Political.Engagement.signing.electronic.petitions = Political.Engagement10, #Q218
-    Political.Engagement.encouraging.action.others2 = Political.Engagement11, #Q219
-    Political.Engagement.organizing.political.events = Political.Engagement12, #Q220
-    Political.Engagement.voting.locally = Political.Engagement13, #Q221
-    Political.Engagement.voting.nationally = Political.Engagement14, #Q222,
-    Ethical.Values.falsely.claim.gov.benefits = Ethical.Values1, #Q177
-    Ethical.Values.avoiding.fares.public.transport = Ethical.Values2, #Q178
-    Ethical.Values.stealing.property = Ethical.Values3, #Q179
-    Ethical.Values.cheating.taxes = Ethical.Values4, #Q180
-    Ethical.Values.accepting.bribes.on.duty = Ethical.Values5, #Q181
-    Ethical.Values.homosexuality = Ethical.Values6, #Q182
-    Ethical.Values.prostitution = Ethical.Values7, #Q183
-    Ethical.Values.abortion = Ethical.Values8, #Q184
-    Ethical.Values.divorce = Ethical.Values9, #Q185
-    Ethical.Values.sex.before.marriage = Ethical.Values10, #Q186
-    Ethical.Values.suicide = Ethical.Values11, #Q187
-    Ethical.Values.euthanasia = Ethical.Values12, #Q188
-    Ethical.Values.beating.wife = Ethical.Values13, #Q189
-    Ethical.Values.beating.children = Ethical.Values14, #Q190
-    Ethical.Values.violence.others = Ethical.Values15, #Q191
-    Ethical.Values.terrorism = Ethical.Values16, #Q192
-    Ethical.Values.casual.sex = Ethical.Values17, #Q193
-    Ethical.Values.political.violence = Ethical.Values18, #Q194
-    Ethical.Values.death.penalty = Ethical.Values19, #Q195
-    Ethical.Values.government.public.video.surveillance = Ethical.Values20, #Q196
-    Ethical.Values.government.monitoring.internet.emails = Ethical.Values21, #Q197
-    Ethical.Values.government.discretely.collecting.info.on.citizens = Ethical.Values22, #Q198
-  )
+    votes.locally = Q221,
+    votes.nationally = Q222,
+    cheating.taxes = Q180,
+    gov.video.surveillance = Q196,
+    gov.email.monitoring = Q197,
+    gov.collecting.info = Q198,
+    terrorism = Q192,
+    death.penalty = Q195,
+    suicide = Q187,
+    beating.wife = Q189,
+    beating.children = Q190,
+    homosexuality = Q182,
+    prostitution = Q183,
+    abortion = Q184,
+    divorce = Q185,
+    casual.sex = Q193,
+    sex.before.marriage = Q186,
+    )
 ```
 
 ## Analysis & Interpretation
@@ -101,6 +79,33 @@ skim(wvs_subset)
 ...Write about observations of the skim here...
 
 ```{r}
+# getting rid of nominal data / continuous data
+# only want to assess correlations between ordinal data
+# discluding political / ethical columns 
+wvs_subset_ordinal <- 
+  wvs_subset %>% 
+  select(-Longitude,
+         -Latitude,
+         -Country, 
+         -Ethnic.Group, 
+         -Religion)
+
+cor <- cor(wvs_subset_ordinal, use = "pairwise.complete.obs")
+corrplot(cor, 
+         method = "circle", 
+         insig = "blank", 
+         diag = FALSE,
+         tl.cex = 0.7) %>% 
+    corrRect(name = c('Age', 
+                      'votes.locally', 
+                      'cheating.taxes', 
+                      'homosexuality', 
+                      'sex.before.marriage'))
+```
+
+...Write about observations of correlation matrix here...
+
+```{r}
 # Testing this... not working, but just an idea for long/lat values
 p_load(maps)
 map("world")
@@ -109,11 +114,11 @@ points(wvs_subset$Latitude, wvs_subset$Longitude, col = "red", pch = ".", cex = 
 
 ```{r}
 Religion.names <- c('No Religion', 'Roman Catholic', 'Protestant', 'Orthodox',
-                    'Jew', 'Muslim', 'Hindu', 'Buddhist', 'Other Christian', 'Other')
+                    'Jew', 'Muslim', 'Hindu', 'Buddhist', 'Other Christian', 'Other', 'NA')
 
 wvs_subset %>% 
   ggplot +
-  aes(x = as.factor(Number.Children), fill = as.factor(Religion)) +
+  aes(x = factor(Number.Children), fill = factor(Religion)) +
   geom_bar(position = "fill") +
   scale_fill_discrete(name = "Religious Denomination",
                       labels = Religion.names) +
