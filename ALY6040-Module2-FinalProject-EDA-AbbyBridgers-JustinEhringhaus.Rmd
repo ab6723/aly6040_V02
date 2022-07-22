@@ -7,7 +7,7 @@ output:
 bibliography: "references.bib"
 nocite: '@*'
 ---
-ab test 07/22
+justin test
 ---
 
 ```{r setup, include=FALSE}
@@ -81,10 +81,6 @@ skim(wvs_subset)
 ```{r}
 # getting rid of nominal data / continuous data
 # only want to assess correlations between ordinal data
-<<<<<<< HEAD
-# discluding political / ethical columns 
-=======
->>>>>>> 15a4185a0e0a5fbe468651b9a3c6bd2e2d240bdd
 wvs_subset_ordinal <- 
   wvs_subset %>% 
   select(-Longitude,
