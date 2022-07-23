@@ -189,6 +189,8 @@ colnames(wvs_subset2)
 skim(wvs_subset2)
 ```
 
+...Initial obs...
+
 # working on a diverging bar chart...something slightly off but seems to be getting there. Will try to improve Sat and if that doesn't work, will delete
 ```{r}
 #install.packages("formattable")
@@ -218,7 +220,9 @@ ggplot(wvs_subset2, aes(x=Confidence.courts, y=Age)) +
   geom_bar(stat = "identity")
 ```
 
-# age hist
+...Obs...
+
+# age hist - adults
 ```{r}
 p <- wvs_subset2 %>%
   filter( Age>17 ) %>%
@@ -232,6 +236,8 @@ p <- wvs_subset2 %>%
 p
 ```
 
+...Obs...
+
 # tables & correlation
 ```{r}
 table(wvs_subset2$Age, wvs_subset2$Immigration.in.country.brings.social.conflict)
@@ -242,6 +248,8 @@ wvs_subset3 <- wvs_subset2[c(-1,-2,-3,-7, -11, -12)]
 str(wvs_subset3)
 cor(wvs_subset3, use = "complete.obs")
 ```
+
+...Obs...future questions/analysis based on findings in correlation matrix...
 
 # age overlaid with income in prop bar chart
 ```{r}
@@ -259,6 +267,8 @@ wvs_subset2 %>%
   ggtitle("Income Group Proportion By Age")
   theme_hc()
 ```
+
+...Obs...mention interest in exploring diverging bar chart...perhaps also likert() function interest...
 
 # likert() function -- WIP, will prob delete bc I haven't been able to figure it out :/
 ```{r}
