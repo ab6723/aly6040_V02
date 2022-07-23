@@ -7,7 +7,7 @@ output:
 bibliography: "references.bib"
 nocite: '@*'
 ---
-
+ 
 ---
 
 ```{r setup, include=FALSE}
@@ -191,29 +191,6 @@ skim(wvs_subset2)
 
 ...Initial obs...
 
-# working on a diverging bar chart...something slightly off but seems to be getting there. Will try to improve Sat and if that doesn't work, will delete
-```{r}
-#install.packages("formattable")
-#library(formattable)
-summary <- wvs_subset2 %>% 
-  group_by(Importance.work, Age) %>% 
-  count(Age = "n1") %>% 
-  group_by(Importance.work) %>% 
-  mutate(percent_resp = n1 / sum(n1)) %>% 
-  ungroup() %>% 
-  mutate(percent_resp_label = percent(n1))
-
-summary
-
-summary %>% 
-  ggplot(aes(x = factor(Importance.work), y = percent_resp, fill = factor(Age))) + geom_col() + geom_text(aes(label = percent_resp_label), position = position_stack(vjust = 0.5),
-                color = "white", fontface = "bold") + coord_flip() + scale_x_discrete() + scale_fill_viridis_d() + labs (title = "Xx", x = NULL, fill = NULL) + theme_minimal() +
-  theme(axis.text.x = element_blank(),
-        axis.title.x = element_blank(),
-        panel.grid = element_blank(),
-        legend.position = "top")
-```
-
 # basic barchart
 ```{r}
 ggplot(wvs_subset2, aes(x=Confidence.courts, y=Age)) + 
@@ -270,46 +247,34 @@ wvs_subset2 %>%
 
 ...Obs...mention interest in exploring diverging bar chart...perhaps also likert() function interest...
 
-# likert() function -- WIP, will prob delete bc I haven't been able to figure it out :/
-```{r}
-#install.packages("HH")
-#library(HH)
-#likert(na.omit(wvs_subset2, Happiness~.))
-#unique(wvs_subset2$Happiness)
-unique(wvs_subset2$Health)
+# Subset combining our variables in anticipation of working from one subset in Module 3 
+xx23 <- merge(wvs_subset, wvs_subset2)
+str(xx23)
+drop <- c("Income.group")
+wvs_subset_mod3 = xx23[,!(names(xx23) %in% drop)]
+str(wvs_subset_mod3) 
 
-happiness12 <- head(na.omit(wvs_subset2$Happiness, 87000))
-happiness1 <- factor(happiness12,
-                       levels = c("1", "2", "3", "4"),
-                       ordered = TRUE)
-                       
-health12 <- head(na.omit(wvs_subset2$Health, 87000))                     
-health1 <- factor(health12,
-                       levels = c("1", "2", "3", "4", "5"),
-                       ordered = TRUE)
-
-happ.health <- data.frame(happiness1, health1)
-str(happ.health)
-
-x123 = likert(happ.health) ## error here
-
-summary(x123)
-```
-
+# 49 variables, 325,552 observations in combined dataframe
 ---
 
 ## TASKS
 
-- Calculate appropriate summary statistics
-- Create appropriate graphs that will give you insights into the data.
+- Calculate appropriate summary statistics - done
+- Create appropriate graphs that will give you insights into the data. - done
 
 Include the answers to following questions:
 
 - What did you do with the data in the context of exploration?
+We created subsets with our data to explore and analyze from two perspectives. This allowed us to form separate viewpoints and then share knowledge in order to better understand the steps necessary to prepare the data for further analysis. 
+
 - How many entries are in the dataset?
+The Wave 7 WVS dataset contains 552 variables and 87,822 rows. We reduced the number of attributes by about 90%, landing on 49 rows of data. 
+
 - Was there missing data? Duplications? How clean was the data?
 - Were their outliers or suspicious data?
 - What did you do to clean the data?
+While there were missing data and and duplications found in our dataset, we elected to refrain from cleaning the data because doing so may unintentionally falsify the results of the WVS survey. In a typical data cleaning process, outliers are removed to concentrate on the central tendency of the data. Missing data is removed and/or standardized for numerical analysis. Since our data is ordinal, and we are interested in including and analyzing the data holistically, we did not feel that it would be appropriate "clean" the data beyond changing column names, selecting attributes of interest, and ensuring that there weren't a prohibitory amount of NA values found in our subsets of interest. 
+
 - What did you find? What intrigued you about the data? Why does that matter?
 - What would your proposed next steps be?
 - What business questions do you plan to answer with your data mining?
