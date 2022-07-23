@@ -189,7 +189,7 @@ colnames(wvs_subset2)
 skim(wvs_subset2)
 ```
 
-...Initial obs...
+There are several attributes in the wvs_subset2 that have high rates of missing entries. However, most attributes have a complete rate close to 100%. One of the most answered questions, an inquiry about whether times of job scarcity should see non-immigrants prioritized, had the highest complete rate and lowest standard deviation among the questions in wvs_subset2.
 
 # basic barchart
 ```{r}
@@ -197,23 +197,38 @@ ggplot(wvs_subset2, aes(x=Confidence.courts, y=Age)) +
   geom_bar(stat = "identity")
 ```
 
-...Obs...
+In the above barchart, confidence in the courts is measured. Confidence ranges from "A great deal" (1) to "Not at all" (4). Most respondents chose 2, meaning they have "Quite a lot" of confidence in the courts. 
 
-# age hist - adults
+# histogram of age of Indonesian respondents 
 ```{r}
 p <- wvs_subset2 %>%
-  filter( Age>17 ) %>%
+  filter( Country=="IDN" ) %>%
   ggplot( aes(x=Age)) +
     geom_histogram( binwidth=3, fill="#69b3a2", color="#e9ecef", alpha=0.9) +
-    ggtitle("Bin size = 3") +
+    ggtitle("Age of Indonesian Respondents") +
     theme_ipsum() +
     theme(
-      plot.title = element_text(size=15)
+      plot.title = element_text(size=20)
     )
-p
+p 
 ```
 
-...Obs...
+In the above histogram, the age of Indonesian respondents is shown. Very few respondents are over the age of 75. The data is clustered around age 30, with the majority of respondents being between ages 25 and 50. The average age in Indonesia is around 30, which aligns with the average age worldwide. Conversely, Germany has a high average age of 48. In the following histogram, I find the age of German respondents to see if the data is clustered around a higher average age than 30 given the much higher country average.
+
+# histogram of age of German respondents 
+```{r}
+p <- wvs_subset2 %>%
+  filter( Country=="DEU" ) %>%
+  ggplot( aes(x=Age)) +
+    geom_histogram( binwidth=3, fill="blue4", color="#e9ecef", alpha=0.9) +
+    ggtitle("Age of German Respondents") +
+    theme_ipsum() +
+    theme(
+      plot.title = element_text(size=20)
+    )
+p 
+```
+As expected, the above histogram shows that the average age of german respondents is closer to 50. There may be a difference in viewpoints among those age 30 and 50, making age an important factor for continued consideration in our project. 
 
 # tables & correlation
 ```{r}
@@ -226,12 +241,12 @@ str(wvs_subset3)
 cor(wvs_subset3, use = "complete.obs")
 ```
 
-...Obs...future questions/analysis based on findings in correlation matrix...
+There is a moderate correlation (p = 0.48) between two questions on immigration. In the immigration questions, respondents were asked to answered their degree of agreement with statements. The moderately positively correlated statements are "Immigration in my country increases crime rate" and "immigration in my country brings social conflict." These questions are answered on the same ordinal scale of 3 options: "disagree", "hard to say", and "agree". For other questions that were not answered on the same ordinal scale, it's a futile exercise to examine correlations because a "2" response on one scale is not equivalent (and often, not even close) to a "2" response on a different scale. An interesting exception to this rule, there is a strong negative correlation between settlement type and town size which are both on a 5-point scale (p = -0.723). A response of "1" to the town size question means the respondent lives in a town of under 5,000 people. A response of "1" to the settlement type question means the respondent lives in the capital city of their country. Therefore, there is a strong inverse relationship between these two attributes. 
 
 # age overlaid with income in prop bar chart
 ```{r}
 library(ggthemes)
-Income.details <- c('Lower Step', 'Second Step', 'Third Step', 'Fourth Step', 'Fifth Step', 'Sixth Step', 'Sixth Step', 'Seventh Step', 'Eigth Step', 'Nineth Step', 'Tenth Step', 'Unknown', 'No Answer', 'Not Asked', 'NA')
+Income.details <- c('Lower Step', 'Second Step', 'Third Step', 'Fourth Step', 'Fifth Step', 'Sixth Step', 'Seventh Step', 'Eigth Step', 'Nineth Step', 'Tenth Step', 'Unknown', 'No Answer', 'Not Asked', 'NA')
 
 wvs_subset2 %>% 
   ggplot +
@@ -245,7 +260,7 @@ wvs_subset2 %>%
   theme_hc()
 ```
 
-...Obs...mention interest in exploring diverging bar chart...perhaps also likert() function interest...
+The above proportional stacked bar graph allows for visualizing differences in income by age. Respondents were shown cards with their country's income broken down into ten buckets. Since this varies heavily by country, the Wave 7 results do not include any specific numbers. Instead, income is purely comparative. In this chart, several middle income groups appear to fall with increasing age; third through sixth steps noticably decrease from young respondents through middle age respondents to elderly respondents. The highest income, tenth step, appears relatively constant across ages, with a noticable increase in variance from age to age among those in and beyond their 80s. The most common income group appears to be the fifth step, which may mean that most people consider themselves middle-class in the context of their home country. 
 
 # Subset combining our variables in anticipation of working from one subset in Module 3 
 xx23 <- merge(wvs_subset, wvs_subset2)
