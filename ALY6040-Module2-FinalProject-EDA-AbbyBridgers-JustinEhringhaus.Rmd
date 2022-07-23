@@ -19,10 +19,11 @@ knitr::opts_chunk$set(echo = TRUE)
 library(pacman)
 p_load(tidyverse)  # usual suite of packages
 p_load(ggthemes)   # extra themes
-p_load(hrbrthemes)
+p_load(hrbrthemes) # more extra themes
 p_load(skimr)      # alternative to summary(), skims dataset: skim()
 p_load(VIM)        # visualization of missing values: aggr()
 p_load(corrplot)   # visualization of a correlation matrix: corrplot()
+p_load(maps)       # world map
 ```
 
 ---
@@ -30,11 +31,15 @@ p_load(corrplot)   # visualization of a correlation matrix: corrplot()
 ## Data Preparation
 
 ```{r message=FALSE, warning=FALSE}
+# importing the entire dataset
 wvs <- read_csv("../WVS_Cross-National_Wave_7_csv_v4_0.csv")
+
+# checking first few rows and columns for import success
 head(wvs)[,1:5]
 ```
 
 ```{r}
+# variables of interest selected and assigned as a subset
 wvs_subset <- 
   wvs %>% 
   select(
@@ -74,14 +79,18 @@ wvs_subset <-
 ## Analysis & Interpretation
 
 ```{r}
-skim(wvs_subset)
+myskim <- skim(wvs_subset)
+myskim
 ```
 
-...Write about observations of the skim here...
+The subset of the dataset contains `r nrow(wvs_subset)` rows and `r ncol(wvs_subset)` columns.
+
+Most variables are numeric; only `Country` is classified as a character vector. `Longitude` and `Latitude` are missing the most data with a completion rate of `r myskim$complete_rate[2]`, but overall the mean completion rate is `r mean(myskim$complete_rate)`, which signifies that missing data is not too much of an issue for the particular variables under consideration.
+
+As many of the variables are Likert scales, the values are ordinal ranging from 1 to 5, for example, and thus the descriptive statistics generated such as mean, sd, quantiles, and histograms give good indications of the distribution and the characteristics of the data. However, certain variables such as `Ethnic.Group`, `Longitude`, and `Latitude` contains nominal, numeric data, and thus the descriptive statistics generated should be ignored.
 
 ```{r}
-# getting rid of continuous data
-# only want to count unique values and counts for categorical data
+# unique values and associated counts for categorical data only
 wvs_subset_categorical <- 
   wvs_subset %>% 
   select(-Longitude,
@@ -90,11 +99,12 @@ wvs_subset_categorical <-
 lapply(wvs_subset_categorical, table)
 ```
 
-...Write about observations of counts of unique values per variable here...
+The unique values and associated counts of the categorical data above reveals the dataset is clean. Thankfully, data collection and data entry efforts conducted by the World Values Survey appear to be rigorous, and thus there do not appear to be instances of inappropriately assigned values.
+
+That said, one question for consideration is whether to consider abnormal or atypical experiences as outlier information. For example, if we examine the `Number.Children` variable, we can see the minimum value is `r min(wvs_subset$Number.Children, na.rm = TRUE)` and the maximum value is `r max(wvs_subset$Number.Children, na.rm = TRUE)`. Clearly, that is a high maximum, but if we assume the value was not entered incorrectly, then this is an actual facet of the human experience and should not be treated as an outlier. Removing such data points from our analysis would, in fact, skew our perception of the human experience, and thus for this particular dataset we will opt not to remove any pieces of information with the assumption that data has rigorously been collected and verified by research professionals.
 
 ```{r}
-# getting rid of nominal data / continuous data
-# only want to assess correlations between ordinal data
+# ordinal, numeric data only 
 wvs_subset_ordinal <- 
   wvs_subset %>% 
   select(-Longitude,
@@ -103,6 +113,8 @@ wvs_subset_ordinal <-
          -Ethnic.Group, 
          -Religion)
 
+# assessing correlations between ordinal, numeric data
+# only including data where pairwise observations are complete (i.e., not including missing data)
 cor <- cor(wvs_subset_ordinal, use = "pairwise.complete.obs")
 corrplot(cor, 
          method = "circle", 
@@ -116,14 +128,30 @@ corrplot(cor,
                       'sex.before.marriage'))
 ```
 
-...Write about observations of correlation matrix here...
+The visualization of a correlation matrix above indicates the extent to which each variable, compared to one another, correlates or relates. Darker blue colors represent stronger positive correlations, and darker orange colors represent stronger negative correlations. For visualization purposes, we have bucketed the variables into four groups, albeit it must be noted that by doing so we risk imposing structure where it does not, or should not, exist: the first box contains variables relating to demographics, the second relates to political participation, the third relates to ethical values, and the fourth relates to social views.
+
+There are endless conversations that could be held based off this visualization of a correlation matrix. Some key insights are as follows:
+
+- All variables in the fourth bucket containing those on social views are strongly correlated. This makes sense, as those with similar social views are generally split along the lines of liberal versus conservative thought. For example, it makes sense that those who hold conservative views on sexuality also hold conservative views on marriage, career, and government.
+- Education is positively correlated with liberal social views (i.e., higher education = more liberal social views)
+- Number of children is negatively correlated with liberal social views (i.e., more children = more conservative social views)
+- Education is negatively correlated with number of children (i.e., higher education = less children)
+- Voting locally or nationally is negatively correlated with age (i.e., older people participate more in politics)
+- Views on terrorism positively correlate with views on domestic abuse (i.e., those who view terrorism favorably also view domestic abuse favorably)
+
+The above observations are, again, several of many, but they represent a springboard for avenues that could be taken for further data exploration.
 
 ```{r}
-# Testing this... not working, but just an idea for long/lat values
-p_load(maps)
+wvs_subset_usa <- 
+  wvs_subset %>% 
+  filter(Country == "USA")
+
 map("world")
-points(wvs_subset$Latitude, wvs_subset$Longitude, col = "red", pch = ".", cex = 2)
+points(wvs_subset_usa$Longitude, wvs_subset_usa$Latitude, col = "red", pch = ".", cex = 2)
 ```
+
+
+
 
 ```{r}
 Religion.names <- c('No Religion', 'Roman Catholic', 'Protestant', 'Orthodox',
@@ -149,6 +177,10 @@ table(wvs_subset$Number.Children, wvs_subset$Religion)
 ```
 
 - BUT, this data is accurate, and so it may not be wise to consider this an outlier. The dataset is meant to encapsulate human values, the human experience, and actual occurences. So deleting data just because it is outside our view of "what is normal" would, in contrast, skew the data.
+
+```{r}
+knitr::knit_exit()
+```
 
 ## Analysis & Interpretation - Subset 2
 
