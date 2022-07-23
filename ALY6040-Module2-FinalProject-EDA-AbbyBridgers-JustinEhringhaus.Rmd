@@ -7,7 +7,7 @@ output:
 bibliography: "references.bib"
 nocite: '@*'
 ---
-
+ 
 ---
 
 ```{r setup, include=FALSE}
@@ -221,30 +221,7 @@ colnames(wvs_subset2)
 skim(wvs_subset2)
 ```
 
-...Initial obs...
-
-# working on a diverging bar chart...something slightly off but seems to be getting there. Will try to improve Sat and if that doesn't work, will delete
-```{r}
-#install.packages("formattable")
-#library(formattable)
-summary <- wvs_subset2 %>% 
-  group_by(Importance.work, Age) %>% 
-  count(Age = "n1") %>% 
-  group_by(Importance.work) %>% 
-  mutate(percent_resp = n1 / sum(n1)) %>% 
-  ungroup() %>% 
-  mutate(percent_resp_label = percent(n1))
-
-summary
-
-summary %>% 
-  ggplot(aes(x = factor(Importance.work), y = percent_resp, fill = factor(Age))) + geom_col() + geom_text(aes(label = percent_resp_label), position = position_stack(vjust = 0.5),
-                color = "white", fontface = "bold") + coord_flip() + scale_x_discrete() + scale_fill_viridis_d() + labs (title = "Xx", x = NULL, fill = NULL) + theme_minimal() +
-  theme(axis.text.x = element_blank(),
-        axis.title.x = element_blank(),
-        panel.grid = element_blank(),
-        legend.position = "top")
-```
+There are several attributes in the wvs_subset2 that have high rates of missing entries. However, most attributes have a complete rate close to 100%. One of the most answered questions, an inquiry about whether times of job scarcity should see non-immigrants prioritized, had the highest complete rate and lowest standard deviation among the questions in wvs_subset2.
 
 # basic barchart
 ```{r}
@@ -252,23 +229,38 @@ ggplot(wvs_subset2, aes(x=Confidence.courts, y=Age)) +
   geom_bar(stat = "identity")
 ```
 
-...Obs...
+In the above barchart, confidence in the courts is measured. Confidence ranges from "A great deal" (1) to "Not at all" (4). Most respondents chose 2, meaning they have "Quite a lot" of confidence in the courts. 
 
-# age hist - adults
+# histogram of age of Indonesian respondents 
 ```{r}
 p <- wvs_subset2 %>%
-  filter( Age>17 ) %>%
+  filter( Country=="IDN" ) %>%
   ggplot( aes(x=Age)) +
     geom_histogram( binwidth=3, fill="#69b3a2", color="#e9ecef", alpha=0.9) +
-    ggtitle("Bin size = 3") +
+    ggtitle("Age of Indonesian Respondents") +
     theme_ipsum() +
     theme(
-      plot.title = element_text(size=15)
+      plot.title = element_text(size=20)
     )
-p
+p 
 ```
 
-...Obs...
+In the above histogram, the age of Indonesian respondents is shown. Very few respondents are over the age of 75. The data is clustered around age 30, with the majority of respondents being between ages 25 and 50. The average age in Indonesia is around 30, which aligns with the average age worldwide. Conversely, Germany has a high average age of 48. In the following histogram, I find the age of German respondents to see if the data is clustered around a higher average age than 30 given the much higher country average.
+
+# histogram of age of German respondents 
+```{r}
+p <- wvs_subset2 %>%
+  filter( Country=="DEU" ) %>%
+  ggplot( aes(x=Age)) +
+    geom_histogram( binwidth=3, fill="blue4", color="#e9ecef", alpha=0.9) +
+    ggtitle("Age of German Respondents") +
+    theme_ipsum() +
+    theme(
+      plot.title = element_text(size=20)
+    )
+p 
+```
+As expected, the above histogram shows that the average age of german respondents is closer to 50. There may be a difference in viewpoints among those age 30 and 50, making age an important factor for continued consideration in our project. 
 
 # tables & correlation
 ```{r}
@@ -281,12 +273,12 @@ str(wvs_subset3)
 cor(wvs_subset3, use = "complete.obs")
 ```
 
-...Obs...future questions/analysis based on findings in correlation matrix...
+There is a moderate correlation (p = 0.48) between two questions on immigration. In the immigration questions, respondents were asked to answered their degree of agreement with statements. The moderately positively correlated statements are "Immigration in my country increases crime rate" and "immigration in my country brings social conflict." These questions are answered on the same ordinal scale of 3 options: "disagree", "hard to say", and "agree". For other questions that were not answered on the same ordinal scale, it's a futile exercise to examine correlations because a "2" response on one scale is not equivalent (and often, not even close) to a "2" response on a different scale. An interesting exception to this rule, there is a strong negative correlation between settlement type and town size which are both on a 5-point scale (p = -0.723). A response of "1" to the town size question means the respondent lives in a town of under 5,000 people. A response of "1" to the settlement type question means the respondent lives in the capital city of their country. Therefore, there is a strong inverse relationship between these two attributes. 
 
 # age overlaid with income in prop bar chart
 ```{r}
 library(ggthemes)
-Income.details <- c('Lower Step', 'Second Step', 'Third Step', 'Fourth Step', 'Fifth Step', 'Sixth Step', 'Sixth Step', 'Seventh Step', 'Eigth Step', 'Nineth Step', 'Tenth Step', 'Unknown', 'No Answer', 'Not Asked', 'NA')
+Income.details <- c('Lower Step', 'Second Step', 'Third Step', 'Fourth Step', 'Fifth Step', 'Sixth Step', 'Seventh Step', 'Eigth Step', 'Nineth Step', 'Tenth Step', 'Unknown', 'No Answer', 'Not Asked', 'NA')
 
 wvs_subset2 %>% 
   ggplot +
@@ -300,48 +292,36 @@ wvs_subset2 %>%
   theme_hc()
 ```
 
-...Obs...mention interest in exploring diverging bar chart...perhaps also likert() function interest...
+The above proportional stacked bar graph allows for visualizing differences in income by age. Respondents were shown cards with their country's income broken down into ten buckets. Since this varies heavily by country, the Wave 7 results do not include any specific numbers. Instead, income is purely comparative. In this chart, several middle income groups appear to fall with increasing age; third through sixth steps noticably decrease from young respondents through middle age respondents to elderly respondents. The highest income, tenth step, appears relatively constant across ages, with a noticable increase in variance from age to age among those in and beyond their 80s. The most common income group appears to be the fifth step, which may mean that most people consider themselves middle-class in the context of their home country. 
 
-# likert() function -- WIP, will prob delete bc I haven't been able to figure it out :/
-```{r}
-#install.packages("HH")
-#library(HH)
-#likert(na.omit(wvs_subset2, Happiness~.))
-#unique(wvs_subset2$Happiness)
-unique(wvs_subset2$Health)
+# Subset combining our variables in anticipation of working from one subset in Module 3 
+xx23 <- merge(wvs_subset, wvs_subset2)
+str(xx23)
+drop <- c("Income.group")
+wvs_subset_mod3 = xx23[,!(names(xx23) %in% drop)]
+str(wvs_subset_mod3) 
 
-happiness12 <- head(na.omit(wvs_subset2$Happiness, 87000))
-happiness1 <- factor(happiness12,
-                       levels = c("1", "2", "3", "4"),
-                       ordered = TRUE)
-                       
-health12 <- head(na.omit(wvs_subset2$Health, 87000))                     
-health1 <- factor(health12,
-                       levels = c("1", "2", "3", "4", "5"),
-                       ordered = TRUE)
-
-happ.health <- data.frame(happiness1, health1)
-str(happ.health)
-
-x123 = likert(happ.health) ## error here
-
-summary(x123)
-```
-
+# 49 variables, 325,552 observations in combined dataframe
 ---
 
 ## TASKS
 
-- Calculate appropriate summary statistics
-- Create appropriate graphs that will give you insights into the data.
+- Calculate appropriate summary statistics - done
+- Create appropriate graphs that will give you insights into the data. - done
 
 Include the answers to following questions:
 
 - What did you do with the data in the context of exploration?
+We created subsets with our data to explore and analyze from two perspectives. This allowed us to form separate viewpoints and then share knowledge in order to better understand the steps necessary to prepare the data for further analysis. 
+
 - How many entries are in the dataset?
+The Wave 7 WVS dataset contains 552 variables and 87,822 rows. We reduced the number of attributes by about 90%, landing on 49 rows of data. 
+
 - Was there missing data? Duplications? How clean was the data?
 - Were their outliers or suspicious data?
 - What did you do to clean the data?
+While there were missing data and and duplications found in our dataset, we elected to refrain from cleaning the data because doing so may unintentionally falsify the results of the WVS survey. In a typical data cleaning process, outliers are removed to concentrate on the central tendency of the data. Missing data is removed and/or standardized for numerical analysis. Since our data is ordinal, and we are interested in including and analyzing the data holistically, we did not feel that it would be appropriate "clean" the data beyond changing column names, selecting attributes of interest, and ensuring that there weren't a prohibitory amount of NA values found in our subsets of interest. 
+
 - What did you find? What intrigued you about the data? Why does that matter?
 - What would your proposed next steps be?
 - What business questions do you plan to answer with your data mining?
