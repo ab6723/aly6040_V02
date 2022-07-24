@@ -7,7 +7,7 @@ output:
 bibliography: "references.bib"
 nocite: '@*'
 ---
- 
+
 ---
 
 ```{r setup, include=FALSE}
@@ -200,21 +200,21 @@ There are endless conversations that could be held based off this visualization 
 - Voting locally or nationally is negatively correlated with age (i.e., older people participate more in politics).
 - Views on terrorism positively correlate with views on domestic abuse (i.e., those who view terrorism favorably also view domestic abuse favorably).
 
+There is a moderate correlation (p = 0.48) between two questions on immigration. In the immigration questions, respondents were asked to answered their degree of agreement with statements. The moderately positively correlated statements are "Immigration in my country increases crime rate" and "immigration in my country brings social conflict." These questions are answered on the same ordinal scale of 3 options: "disagree", "hard to say", and "agree". For other questions that were not answered on the same ordinal scale, it's a futile exercise to examine correlations because a "2" response on one scale is not equivalent (and often, not even close) to a "2" response on a different scale. An interesting exception to this rule, there is a strong negative correlation between settlement type and town size which are both on a 5-point scale (p = -0.723). A response of "1" to the town size question means the respondent lives in a town of under 5,000 people. A response of "1" to the settlement type question means the respondent lives in the capital city of their country. Therefore, there is a strong inverse relationship between these two attributes.
+
 ```{r}
-table(wvs_subset$Age, wvs_subset$imm.brings.social.conflict)
-prop.table(table(wvs_subset$Age))
+# table(wvs_subset$Age, wvs_subset$imm.brings.social.conflict)
+# prop.table(table(wvs_subset$Age))
 
 # tables & correlation
-data.frame(colnames(wvs_subset))
+# data.frame(colnames(wvs_subset))
 # NOTE FROM JUSTIN: this is likely different now that our subsets have been combined/rearranged
 # You'll likely need to change the values here if you want to include this. 
 # Alternatively, reference the visualization (just strength of colors) instead of specific p-value
-wvs_subset3 <- wvs_subset[c(-1,-2,-3,-7, -11, -12)]
-str(wvs_subset3)
-cor(wvs_subset3, use = "complete.obs")
+# wvs_subset3 <- wvs_subset[c(-1,-2,-3,-7, -11, -12)]
+# str(wvs_subset3)
+# cor(wvs_subset3, use = "complete.obs")
 ```
-
-There is a moderate correlation (p = 0.48) between two questions on immigration. In the immigration questions, respondents were asked to answered their degree of agreement with statements. The moderately positively correlated statements are "Immigration in my country increases crime rate" and "immigration in my country brings social conflict." These questions are answered on the same ordinal scale of 3 options: "disagree", "hard to say", and "agree". For other questions that were not answered on the same ordinal scale, it's a futile exercise to examine correlations because a "2" response on one scale is not equivalent (and often, not even close) to a "2" response on a different scale. An interesting exception to this rule, there is a strong negative correlation between settlement type and town size which are both on a 5-point scale (p = -0.723). A response of "1" to the town size question means the respondent lives in a town of under 5,000 people. A response of "1" to the settlement type question means the respondent lives in the capital city of their country. Therefore, there is a strong inverse relationship between these two attributes.
 
 The above observations from the correlation matrix are just several of many possible avenues for exploration. By understanding how different variables correlate, we can begin to explore specific facets of the dataset in more detail.
 
