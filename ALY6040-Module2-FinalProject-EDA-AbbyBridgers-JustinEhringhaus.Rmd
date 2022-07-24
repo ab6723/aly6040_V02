@@ -203,9 +203,9 @@ table(wvs_subset$Number.Children, wvs_subset$Religion)
 
 - BUT, this data is accurate, and so it may not be wise to consider this an outlier. The dataset is meant to encapsulate human values, the human experience, and actual occurences. So deleting data just because it is outside our view of "what is normal" would, in contrast, skew the data.
 
-```{r}
-knitr::knit_exit()
-```
+# ```{r}
+# knitr::knit_exit()
+# ```
 
 ## Analysis & Interpretation - Subset 2
 
