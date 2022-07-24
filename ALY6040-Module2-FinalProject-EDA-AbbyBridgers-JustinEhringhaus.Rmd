@@ -139,19 +139,44 @@ There are endless conversations that could be held based off this visualization 
 - Voting locally or nationally is negatively correlated with age (i.e., older people participate more in politics)
 - Views on terrorism positively correlate with views on domestic abuse (i.e., those who view terrorism favorably also view domestic abuse favorably)
 
-The above observations are, again, several of many, but they represent a springboard for avenues that could be taken for further data exploration.
+The above observations from the correlation matrix are just several of many possible avenues for exploration. By understanding how different variables correlate, we can begin to explore specific facets of the dataset in more detail.
 
 ```{r}
-wvs_subset_usa <- 
-  wvs_subset %>% 
-  filter(Country == "USA")
+map_color_range <- function(tibl, col, 
+                            min = 1, max = 10, 
+                            min_color = "green", max_color = "red",
+                            shape = 1, size = 0.4) {
+  # vector of color gradients with a length of `max`
+  colors <- colorRampPalette(c(min_color, max_color))(max)
+  # executes points() function for each value between min and max
+  for (i in min:max) {
+    tibl_subset_col <- 
+      tibl %>% 
+      filter(col == i) 
+    points(tibl_subset_col$Longitude, 
+           tibl_subset_col$Latitude, 
+           col = alpha(colors[i], 0.4), # colors from color ramp above
+           pch = shape, 
+           cex = size)
+  }
+}
 
 map("world")
-points(wvs_subset_usa$Longitude, wvs_subset_usa$Latitude, col = "red", pch = ".", cex = 2)
+title(main = "Happiest (Green) vs. Unhappiest (Red)")
+map_color_range(wvs_subset, wvs_subset$Happiness, max = 4)
 ```
 
+Another way of exploring the data is to investigate geospatial relationships using longitude and latitude data paired with variables of interest. For example, the visualization above reveals respondents happiness levels from "very happy" (green points) to "not at all happy" (red).
 
+For another example, we will visualize beliefs on homosexuality below, where greener colors represent those who believe homosexuality is "always justifiable" and redder colors represent those who believe homosexuality is "never justifiable."
 
+```{r}
+map("world")
+title(main = "Believes Homosexuality is Justifiable (Green) vs. Never Justifiable (Red)")
+map_color_range(wvs_subset, 
+                wvs_subset$homosexuality, 
+                max = 10, min_color = "red", max_color = "green")
+```
 
 ```{r}
 Religion.names <- c('No Religion', 'Roman Catholic', 'Protestant', 'Orthodox',
