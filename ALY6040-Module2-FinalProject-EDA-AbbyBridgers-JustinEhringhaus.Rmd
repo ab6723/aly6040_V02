@@ -3,7 +3,7 @@ title: "Module 2 Final Project — Milestone 1: EDA"
 author: "Abby Bridgers and Justin Ehringhaus"
 date: "July 24, 2022"
 output:
-  github_document: default
+  html_document: default
 bibliography: "references.bib"
 nocite: '@*'
 ---
