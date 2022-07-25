@@ -3,7 +3,7 @@ title: "Module 2 Final Project — Milestone 1: EDA"
 author: "Abby Bridgers and Justin Ehringhaus"
 date: "July 24, 2022"
 output:
-  html_document: default
+  github_document: default
 bibliography: "references.bib"
 nocite: '@*'
 ---
@@ -344,7 +344,7 @@ The above proportional stacked bar graph allows for visualizing differences in i
 - In addition, we explored religious affiliation and number of children using a proportional bar chart. We found that the respondent with 24 children is Protestant. In addition, from this chart, we were able to see the religious makeup of respondents; the plurality of respondents are Hindus.
 - We also explored income group proportion by age, finding that the highest income group was fairly equally represented across ages, while other income groups, such as the lowest step and the third-lowest step, increased in proportion with age. 
 
-###### These preliminary findings matter because they shed light on differences in identity, which can be contrasted to social, political, and ethical viewpoints to deduce relationships between identity and belief.
+These preliminary findings matter because they shed light on differences in identity, which can be contrasted to social, political, and ethical viewpoints to deduce relationships between identity and belief.
 
 ##### What would your proposed next steps be?
 
