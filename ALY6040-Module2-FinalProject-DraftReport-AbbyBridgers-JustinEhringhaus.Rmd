@@ -1,0 +1,17 @@
+---
+title: Module 4 Final Project — Milestone 2: Draft Report
+author: Abby Bridgers and Justin Ehringhaus
+date: July 24, 2022
+output:
+  html_document: default
+  # github_document: default
+bibliography: "references.bib"
+nocite: '@*'
+---
+
+---
+
+```{r setup, include=FALSE}
+# repo: https://github.com/ab6723/aly6040_V02
+knitr::opts_chunk$set(echo = TRUE)
+```
