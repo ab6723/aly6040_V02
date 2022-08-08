@@ -17,7 +17,14 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Abby's Plan/Ideas/Thoughts for Draft Report
-test
+Introduction
+- Pull from Mods 1 and 2
+Analysis
+- Combine our ideas and then delete from there as we did in Mod 2 assignment
+Interpretation
+- Key takeaways, connecting findings and ideas to big picture of values
+Recommendations
+- Next steps
 
 ## Justin's Plan/Ideas/Thoughts for Draft Report
 
