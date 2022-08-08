@@ -17,14 +17,21 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Abby's Plan/Ideas/Thoughts for Draft Report
-Introduction
-- Pull from Mods 1 and 2
+## Introduction
+The World Values Survey (WVS) aims to understand the values, beliefs, and norms of people all over the world, comparatively and longitudinally. Operating in more than 120 countries and conducted every five years, the WVS uses a common questionnaire and household interview format to investigate human beliefs. The data is made available in waves, where the most recent Wave 7 represents interviews conducted between 2017-2022. Time series data including all waves pooled between 1981-2022 is also available.
+
+While examining the pooled dataset would certainly be interesting to answer questions about the changes worldwide in people’s values, beliefs, and norms, we are opting to limit the scope of our project to recent years (Wave 7: 2017-2022). Already, the size and scope of this dataset represents a big step for our group’s budding data analysts, as we have never yet worked with anything so faceted. The Wave 7 dataset is wide, containing 552 variables and 87,822 rows, and thus it will be necessary to subset those variables that interest us the most.
+
+Our team (Abby Bridgers and Justin Ehringhaus) are interested in how universal certain values are as well as how values differentiate across the globe. Abby is hoping to learn specifically about values on immigration, and Justin is hoping to learn specifically about social views and ethical values. 
+
 Analysis
 - Combine our ideas and then delete from there as we did in Mod 2 assignment
+
 Interpretation
 - Key takeaways, connecting findings and ideas to big picture of values
+
 Recommendations
-- Next steps
+- Next steps for our final week of class, and ideas for future analysis beyond the scope of ALY 6040
 
 ## Justin's Plan/Ideas/Thoughts for Draft Report
 
