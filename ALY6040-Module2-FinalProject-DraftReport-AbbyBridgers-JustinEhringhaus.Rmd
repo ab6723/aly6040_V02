@@ -1,10 +1,13 @@
 ---
-title: Module 4 Final Project — Milestone 2: Draft Report
+title: "Module 4 Final Project — Milestone 2: Draft Report"
 author: Abby Bridgers and Justin Ehringhaus
-date: July 24, 2022
+date: Last edited `r format(Sys.time(), '%B %d, %Y')` at `r format(Sys.time(), '%H:%M')`
 output:
-  html_document: default
+  html_document: 
+    toc: true
+    toc_depth: 5
   # github_document: default
+  #  toc: true
 bibliography: "references.bib"
 nocite: '@*'
 ---
@@ -16,22 +19,7 @@ nocite: '@*'
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Abby's Plan/Ideas/Thoughts for Draft Report
-### Introduction
-The World Values Survey (WVS) aims to understand the values, beliefs, and norms of people all over the world, comparatively and longitudinally. Operating in more than 120 countries and conducted every five years, the WVS uses a common questionnaire and household interview format to investigate human beliefs. The data is made available in waves, where the most recent Wave 7 represents interviews conducted between 2017-2022. Time series data including all waves pooled between 1981-2022 is also available.
-
-While examining the pooled dataset would certainly be interesting to answer questions about the changes worldwide in people’s values, beliefs, and norms, we are opting to limit the scope of our project to recent years (Wave 7: 2017-2022). Already, the size and scope of this dataset represents a big step for our group’s budding data analysts, as we have never yet worked with anything so faceted. The Wave 7 dataset is wide, containing 552 variables and 87,822 rows, and thus it will be necessary to subset those variables that interest us the most.
-
-Our team (Abby Bridgers and Justin Ehringhaus) are interested in how universal certain values are as well as how values differentiate across the globe. Abby is hoping to learn specifically about values on immigration, and Justin is hoping to learn specifically about social views and ethical values. 
-
-In the following report, we analyze a subset of the Wave 7 dataset using data mining techniques such as ..., ... and ... . We answer questions such as " ... " and provide insights into ... and ..., among other things. 
-
-### Analysis
-- Combine our ideas and then delete from there as we did in Mod 2 assignment
-
-## Decision Tree 
 ```{r}
-# libraries
 library(pacman)
 p_load(tidyverse)  # usual suite of packages
 p_load(ggthemes)   # extra themes
@@ -40,13 +28,193 @@ p_load(skimr)      # alternative to summary(), skims dataset: skim()
 p_load(VIM)        # visualization of missing values: aggr()
 p_load(corrplot)   # visualization of a correlation matrix: corrplot()
 p_load(maps)       # world map
+p_load(rpart)
+```
 
+---
+
+## Introduction
+
+##### Overview
+
+The World Values Survey (WVS) aims to understand the values, beliefs, and norms of people all over the world, comparatively and longitudinally. Operating in more than 120 countries and conducted every five years, the WVS uses a common questionnaire and household interview format to investigate human beliefs. The data is made available in waves, where the most recent Wave 7 represents interviews conducted between 2017-2022. Time series data including all waves pooled between 1981-2022 is also available.
+
+While examining the pooled dataset would certainly be interesting to answer questions about the changes worldwide in people’s values, beliefs, and norms, we are opting to limit the scope of our project to recent years (Wave 7: 2017-2022). Already, the size and scope of this dataset represents a big step for our group’s budding data analysts, as we have never yet worked with anything so faceted. The Wave 7 dataset is wide, containing 552 variables and 87,822 rows.  We reduced the number of attributes by about 90%. More details follow.
+
+Our team (Abby Bridgers and Justin Ehringhaus) are interested in how universal certain values are as well as how values differentiate across the globe. Abby is hoping to learn specifically about values on immigration, and Justin is hoping to learn specifically about social views and ethical values. 
+
+##### Missing data? Duplicates? Cleanliness? Outliers?
+
+While there was missing data found in our dataset, we elected to refrain from cleaning the data because doing so may unintentionally falsify the results of the WVS survey. In a typical data cleaning process, outliers are removed to concentrate on the central tendency of the data. Missing data is removed and/or standardized for numerical analysis. Since our data is ordinal, and we are interested in including and analyzing the data holistically, we did not feel that it would be appropriate to "clean" the data beyond changing column names, selecting attributes of interest, and ensuring that there was not a prohibitory amount of NA values found in our subsets of interest.
+
+##### Methods
+
+We analyze particular subsets of the dataset using data mining techniques such as ..., ..., and ... .
+... explain in more detail about each method used and perhaps integrate the explanations with the particular business questions below...
+
+##### Business questions
+
+... either integrate with "Methods" above or introduce our business questions here ...
+
+- Predicting the happiness and health of an individual.
+- Predicting the religious affiliation of an individual.
+- Predicting the immigration views, social views, and ethical values of an individual.
+- The relationship between income (Q288), happiness (Q46), and health (Q47).
+- The relationship between marital status (Q273) and political engagement (Q209 - Q222).
+- The relationship between religious denomination (Q289) and number of children (Q274).
+- The differences in ethical values (Q177-Q195) by ethnic group (Q290).
+- The relationship between immigration stance (122:130) and age (262).
+- The relationship between education completed (Q275) and the importance of leisure time (Q3).
+
+---
+
+## Data Preparation
+
+```{r message=FALSE, warning=FALSE}
 # importing the entire dataset
 wvs <- read_csv("../WVS_Cross-National_Wave_7_csv_v4_0.csv")
 
 # checking first few rows and columns for import success
 head(wvs)[,1:5]
+```
 
+```{r}
+wvs_subset <- 
+  wvs %>% 
+  select(
+    # --------------------------- DEMOGRAPHICS
+    Country = B_COUNTRY_ALPHA,
+    Longitude = O1_LONGITUDE,
+    Latitude = O2_LATITUDE,
+    Settlement.type = H_SETTLEMENT,
+    Country.and.year = S025,
+    Town.size = G_TOWNSIZE2,
+    Age = Q262,
+    Income.Group = Q288,
+    Ethnic.Group = Q290, # see WVS_codebook.pdf for Q290 coding info
+    Immigrant = Q263,
+    Religion = Q289,
+    Marital.Status = Q273,
+    Education = Q275,
+    Number.Children = Q274,
+    Happiness = Q46,
+    Health = Q47,
+    # --------------------------- POLITICAL PARTICIPATION / CONFIDENCE IN GOVERNMENT
+    votes.locally = Q221,
+    votes.nationally = Q222,
+    confidence.elections = Q76,
+    confidence.courts = Q70,
+    confidence.UN = Q83,
+    environment.vs.econgrow = Q111,
+    # --------------------------- RELATIONSHIP BETWEEN GOVERNMENT AND CITIZENS
+    cheating.taxes = Q180,
+    gov.video.surveillance = Q196,
+    gov.email.monitoring = Q197,
+    gov.collecting.info = Q198,
+    # --------------------------- ETHICAL VALUES ---------------------------
+    terrorism = Q192,
+    death.penalty = Q195,
+    suicide = Q187,
+    beating.wife = Q189,
+    beating.children = Q190,
+    # --------------------------- SOCIAL VIEWS ---------------------------
+    homosexuality = Q182,
+    prostitution = Q183,
+    abortion = Q184,
+    divorce = Q185,
+    casual.sex = Q193,
+    sex.before.marriage = Q186,
+    # --------------------------- CAREER VALUES ---------------------------
+    importance.leisure.time = Q3,
+    importance.work = Q5,
+    # --------------------------- IMMIGRATION ---------------------------
+    job.scarc.prioritizes.nonimm = Q34,
+    imm.fills.useful.jobs = Q122,
+    imm.strengthens.cultural.div = Q123,
+    imm.increases.crime.rate = Q124,
+    imm.gives.political.asylum = Q125,
+    imm.increases.terrorism.risk = Q126,
+    imm.helps.poor = Q127,
+    imm.increases.unemployment = Q128,
+    imm.brings.social.conflict = Q129,
+    imm.policy.preference = Q130
+    )
+```
+
+---
+
+## Exploratory Data Analysis
+
+```{r}
+myskim <- skim(wvs_subset)
+myskim
+```
+
+The subset of the dataset contains `r nrow(wvs_subset)` rows and `r ncol(wvs_subset)` columns.
+
+Most variables are numeric; only `Country` is classified as a character vector. `Longitude` and `Latitude` are missing the most data with a completion rate of `r myskim$complete_rate[2]`, but overall the mean completion rate is `r mean(myskim$complete_rate)`, which signifies that missing data is not too much of an issue for the particular variables under consideration.
+
+As many of the variables are Likert scales, the values are ordinal ranging from 1 to 5, for example, and thus the descriptive statistics generated such as mean, sd, quantiles, and histograms give good indications of the distribution and the characteristics of the data. However, certain variables such as `Ethnic.Group`, `Country.and.year`, `Longitude`, and `Latitude` contains nominal, numeric data, and thus the descriptive statistics generated should be ignored.
+
+```{r}
+# ordinal, numeric data only 
+wvs_subset_ordinal <- 
+  wvs_subset %>% 
+  select(-Longitude,
+         -Latitude,
+         -Country, 
+         -Ethnic.Group, 
+         -Country.and.year,
+         -Religion)
+
+# assessing correlations between ordinal, numeric data
+# only including data where pairwise observations are complete (i.e., not including missing data)
+cor <- cor(wvs_subset_ordinal, use = "pairwise.complete.obs")
+corrplot(cor, 
+         method = "circle", 
+         insig = "blank", 
+         diag = FALSE,
+         tl.cex = 0.5) %>% 
+    corrRect(name = c('Settlement.type', 
+                      'votes.locally', 
+                      'cheating.taxes', 
+                      'terrorism', 
+                      'homosexuality',
+                      'importance.leisure.time',
+                      'job.scarc.prioritizes.nonimm',
+                      'imm.policy.preference'))
+```
+
+The visualization of a correlation matrix above indicates the extent to which each variable, compared to one another, correlates or relates. Darker blue colors represent stronger positive correlations, and darker orange colors represent stronger negative correlations. For visualization purposes, we have bucketed the variables into four groups, albeit it must be noted that by doing so we risk imposing structure where it does not, or should not, exist: 
+
+- The first bucket contains variables relating to demographics
+- The second relates to political participation / confidence in government
+- The third relates to the relationship between government and citizens
+- The fourth relates to ethical values
+- The fifth relates to social views
+- The sixth relates to career values
+- The seventh relates to immigration
+
+There are endless conversations that could be held based off this visualization of a correlation matrix. Some key insights are as follows:
+
+- All variables in the fifth bucket (social views) are strongly correlated. This makes sense, as those with similar social views are generally split along the lines of liberal versus conservative thought. For example, it makes sense that those who hold conservative views on sexuality also hold conservative views on marriage, career, and government.
+- Education is positively correlated with liberal social views (i.e., higher education = more liberal social views).
+- Number of children is negatively correlated with liberal social views (i.e., more children = more conservative social views).
+- Education is negatively correlated with number of children (i.e., higher education = less children).
+- Voting locally or nationally is negatively correlated with age (i.e., older people participate more in politics).
+- Views on terrorism positively correlate with views on domestic abuse (i.e., those who view terrorism favorably also view domestic abuse favorably).
+- There is a moderate correlation between two questions on immigration. In the immigration questions, respondents were asked to answered their degree of agreement with statements. The moderately positively correlated statements are "Immigration in my country increases crime rate" and "immigration in my country brings social conflict." These questions are answered on the same ordinal scale of 3 options: "disagree", "hard to say", and "agree". 
+- There is a strong negative correlation between settlement type and town size which are both on a 5-point scale. A response of "1" to the town size question means the respondent lives in a town of under 5,000 people. A response of "1" to the settlement type question means the respondent lives in the capital city of their country. Therefore, there is a strong inverse relationship between these two attributes.
+
+Having understood how different variables correlate, we can transition to applying data mining techniques to answering our business questions.
+
+---
+
+## Data Mining Techniques and Interpretations
+
+... explain reason for choosing decision tree / what business question(s) we hope to answer using this approach ...
+
+```{r}
 # sub-setting data
 tree_subset <- 
   wvs %>% 
@@ -79,20 +247,11 @@ nrow(tree_subset)
 nrow(train)
 nrow(test)
 head(train)
-
-# 
-library(rpart)
-         
 ```
 
-### Interpretation
+## Interpretation
 - Key takeaways, connecting findings and ideas to big picture of values
 
-### Recommendations
+## Recommendations
 - Next steps for our final week of class // final report
 - Ideas for future analysis beyond the scope of ALY 6040
-
-## Justin's Plan/Ideas/Thoughts for Draft Report
-Test
-
-
