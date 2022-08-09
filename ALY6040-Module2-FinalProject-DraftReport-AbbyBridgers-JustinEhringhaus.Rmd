@@ -24,16 +24,72 @@ While examining the pooled dataset would certainly be interesting to answer ques
 
 Our team (Abby Bridgers and Justin Ehringhaus) are interested in how universal certain values are as well as how values differentiate across the globe. Abby is hoping to learn specifically about values on immigration, and Justin is hoping to learn specifically about social views and ethical values. 
 
-In the following report, we analyze a subset of the Wave 7 data set using data mining techniques such as ..., ... and ... . We answer questions such as " ... " and provide insights into ... and ..., among other things. 
+In the following report, we analyze a subset of the Wave 7 dataset using data mining techniques such as ..., ... and ... . We answer questions such as " ... " and provide insights into ... and ..., among other things. 
 
 ### Analysis
 - Combine our ideas and then delete from there as we did in Mod 2 assignment
+
+## Decision Tree 
+```{r}
+# libraries
+library(pacman)
+p_load(tidyverse)  # usual suite of packages
+p_load(ggthemes)   # extra themes
+p_load(hrbrthemes) # more extra themes
+p_load(skimr)      # alternative to summary(), skims dataset: skim()
+p_load(VIM)        # visualization of missing values: aggr()
+p_load(corrplot)   # visualization of a correlation matrix: corrplot()
+p_load(maps)       # world map
+
+# importing the entire dataset
+wvs <- read_csv("../WVS_Cross-National_Wave_7_csv_v4_0.csv")
+
+# checking first few rows and columns for import success
+head(wvs)[,1:5]
+
+# sub-setting data
+tree_subset <- 
+  wvs %>% 
+  select(Immigrants.As.Neighbors = Q21, # 1 = mentioned they wouldn't like this,                                             2 = didn't mention
+        Tolerance.Important.For.Children = Q12, # 1 = mentioned to be important,                                                     2 = didn't mention
+        Immigration.Increases.Terrorism.Risk = Q126) # 2 = agree, 1 = unsure, 0 = disagree
+
+# skim
+tree_skim <- skim(tree_subset)
+
+# prop tables
+prop.table(table(tree_subset$Immigrants.As.Neighbors))
+prop.table(table(tree_subset$Tolerance.Important.For.Children))
+prop.table(table(tree_subset$Immigration.Increases.Terrorism.Risk))
+
+# partition prep
+library(caret)
+set.seed(1234)
+
+# remove NAs
+tree_subset <- na.omit(tree_subset)
+
+# partition
+data_partition<-createDataPartition(y=tree_subset$Tolerance.Important.For.Children, p=0.8, list=FALSE)
+train<-na.omit(tree_subset[data_partition,]) #head added for now
+test<-tree_subset[-data_partition,]
+
+# checking partition and NA omits
+nrow(tree_subset)
+nrow(train)
+nrow(test)
+head(train)
+
+# 
+library(rpart)
+         
+```
 
 ### Interpretation
 - Key takeaways, connecting findings and ideas to big picture of values
 
 ### Recommendations
-- Next steps for our final week of class //final report
+- Next steps for our final week of class // final report
 - Ideas for future analysis beyond the scope of ALY 6040
 
 ## Justin's Plan/Ideas/Thoughts for Draft Report
