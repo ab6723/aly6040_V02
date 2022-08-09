@@ -50,12 +50,38 @@ head(wvs)[,1:5]
 # sub-setting data
 tree_subset <- 
   wvs %>% 
-  select(Immigrants.As.Neighbors = Q21, #1 = mentioned they wouldn't like this,                                         2 = didn't mention
-        Tolerance.Important.For.Children = Q12, #1 = mentioned to be improtant,                                                 2 = didn't mention
-        Immigration.Increases.Terrorism.Risk = Q126)
+  select(Immigrants.As.Neighbors = Q21, # 1 = mentioned they wouldn't like this,                                             2 = didn't mention
+        Tolerance.Important.For.Children = Q12, # 1 = mentioned to be important,                                                     2 = didn't mention
+        Immigration.Increases.Terrorism.Risk = Q126) # 2 = agree, 1 = unsure, 0 = disagree
 
 # skim
 tree_skim <- skim(tree_subset)
+
+# prop tables
+prop.table(table(tree_subset$Immigrants.As.Neighbors))
+prop.table(table(tree_subset$Tolerance.Important.For.Children))
+prop.table(table(tree_subset$Immigration.Increases.Terrorism.Risk))
+
+# partition prep
+library(caret)
+set.seed(1234)
+
+# remove NAs
+tree_subset <- na.omit(tree_subset)
+
+# partition
+data_partition<-createDataPartition(y=tree_subset$Tolerance.Important.For.Children, p=0.8, list=FALSE)
+train<-na.omit(tree_subset[data_partition,]) #head added for now
+test<-tree_subset[-data_partition,]
+
+# checking partition and NA omits
+nrow(tree_subset)
+nrow(train)
+nrow(test)
+head(train)
+
+# 
+library(rpart)
          
 ```
 
