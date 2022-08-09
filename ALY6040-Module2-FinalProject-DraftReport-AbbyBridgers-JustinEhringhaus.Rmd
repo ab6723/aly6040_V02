@@ -28,7 +28,8 @@ p_load(skimr)      # alternative to summary(), skims dataset: skim()
 p_load(VIM)        # visualization of missing values: aggr()
 p_load(corrplot)   # visualization of a correlation matrix: corrplot()
 p_load(maps)       # world map
-p_load(rpart)
+p_load(rpart, rpart.plot)
+p_load(caret)
 ```
 
 ---
@@ -231,9 +232,7 @@ prop.table(table(tree_subset$Tolerance.Important.For.Children))
 prop.table(table(tree_subset$Immigration.Increases.Terrorism.Risk))
 
 # partition prep
-library(caret)
 set.seed(1234)
-
 # remove NAs
 tree_subset <- na.omit(tree_subset)
 
@@ -247,6 +246,73 @@ nrow(tree_subset)
 nrow(train)
 nrow(test)
 head(train)
+```
+
+```{r}
+# Predicting the religious affiliation of an individual.
+religion_tree <- 
+  wvs_subset %>% 
+  select(
+    # --------------------------- PREDICTING THIS ---------------------------
+    Religion,
+    # --------------------------- GIVEN THESE ---------------------------
+    terrorism,
+    death.penalty,
+    suicide,
+    beating.wife,
+    beating.children,
+    homosexuality,
+    prostitution,
+    abortion,
+    divorce,
+    casual.sex,
+    sex.before.marriage
+  )
+
+# partition prep
+set.seed(888)
+# remove NAs
+religion_tree <- na.omit(religion_tree)
+
+# partition
+religion_tree_partition <- createDataPartition(y = religion_tree$Religion, p = 0.8, list = FALSE)
+religion_tree_train <- na.omit(religion_tree[religion_tree_partition, ])
+religion_tree_test <- religion_tree[-religion_tree_partition, ]
+
+# building the classification tree with rpart
+religion_tree_model <- rpart(formula = Religion ~ .,
+                             data = religion_tree_train,
+                             method = "class")
+
+summary(religion_tree_model)
+
+# Visualize the decision tree with rpart.plot
+rpart.plot(religion_tree_model, nn = TRUE)
+
+# Religions:
+# 0 = Do not belong to a denomination
+# 1 = Roman Catholic
+# 5 = Muslim
+# Unused: Protestant, Orthodox (Russian/Greek/etc.), Jew, Hindu, Buddhist, Other
+
+# Sex Before Marriage: scale from 1 (never justifiable) to 10 (always justifiable)
+# Homosexuality: scale from 1 (never justifiable) to 10 (always justifiable)
+
+# Interpretation:
+# 62% of those who think sex before marriage is slightly justifiable do not have a religion
+# 38% of those who think sex before marriage is never justifiable have a religion
+# Of those having a religion, the line is split along views on homosexuality:
+#     - 4% of those who think homosexuality is justifiable are Roman Catholics
+#     - 34% of those who think homosexuality is not justifiable are Muslim
+
+#Testing the model
+pred_religion_tree_model <- predict(object = religion_tree_model, religion_tree[-1], type = "class")
+
+#Calculating accuracy
+
+# stuck here for now, will continue later
+religion_tree_model_matrix <- table(religion_tree$Religion, pred_religion_tree_model)
+confusionMatrix(religion_tree_model_matrix)
 ```
 
 ## Interpretation
