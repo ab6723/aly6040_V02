@@ -227,9 +227,9 @@ tree_subset <-
 tree_skim <- skim(tree_subset)
 
 # prop tables
-prop.table(table(tree_subset$Immigrants.As.Neighbors))
-prop.table(table(tree_subset$Tolerance.Important.For.Children))
-prop.table(table(tree_subset$Immigration.Increases.Terrorism.Risk))
+prop.table(table(tree_subset$Immigrants.As.Neighbors)) # 1 = mentioned they wouldn't like this,                                                  2 = didn't mention
+prop.table(table(tree_subset$Tolerance.Important.For.Children)) # 1 = mentioned to be important,                                                      2 = didn't mention
+prop.table(table(tree_subset$Immigration.Increases.Terrorism.Risk)) # 2 = agree, 1 = unsure,                                                                     0 = disagree
 
 # partition prep
 set.seed(1000)
@@ -249,24 +249,37 @@ head(train)
 
 # tree plotting
 library(rpart)
-equation = Tolerance.Important.For.Children~Immigrants.As.Neighbors+Immigration.Increases.Terrorism.Risk
 
-tolerance_tree <- rpart(formula = equation, 
+tolerance_tree <- rpart(formula = Tolerance.Important.For.Children ~., 
                  data = train,
                  method = 'class',
-                minsplit=2,
+                #minsplit=2,
                 cp=-1,
-                 minbucket = 2,
-                parms = list(split = 'gini'))
+                 #minbucket = 2,
+                #parms = list(split = 'gini')
+                )
 
 summary(tolerance_tree)
 
 # tree visualization
 library(rattle)
 library(rpart.plot)
-rpart.plot(tolerance_tree, box.palette="BlGnYl")
-fancyRpartPlot(tolerance_tree, caption = "Health")
+fancyRpartPlot(tolerance_tree, caption = "Predicting Importance of Teaching Children Tolerance Based on Immigration Viewpoints")
 
+# Immigrants as neighbors: 1 = wouldn't like  2 = didn't mention
+                           #0.2199076           0.7800924
+
+# Tolerance important for children: 1 = yes   2 = didn't mention 
+                                  # 0.6282186    0.3717814
+
+# Immigration increases terrorism risk: # 2 = agree, 1 = unsure, 0 = disagree
+                                        # 0.4558246,  0.2214990,  0.3226764
+
+# It may be assumed that immigration viewpoints would be a strong predictor of importance of teaching children tolerance. If people view immigrants as an important aspect of their home home country culture and communities, we would likely describe them as tolerant, among other things. Therefore, analyzing the results of the decision tree with one positive question about immigration and one negative, it's interesting to see the results on the leaves, which all land close the 50/50 line, with tolerance being important teaching for children holding the majority in each leaf. 
+
+# Of the 78% of respondents that indicated they'd like to have immigrants as neighbors, 40% of respondents agreed with the statement, "immigration increases the risk of terrorism." This group, comprising 18% of the total respondents included in the tree is not comprehensive as NAs were omitted for analysis. However, it is still an interesting finding that 18% of those responses included hold a somewhat contradictory set of beliefs; immigrants increase risk of terrorism, but they don't voice a hesitancy to have immigrants as neighbors. 
+
+#
 ```
 
 ```{r}
