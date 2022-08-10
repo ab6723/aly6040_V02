@@ -57,7 +57,7 @@ We analyze particular subsets of the dataset using data mining techniques such a
 
 - #2: Predicting the religious affiliation of an individual given their social views and ethical values.
 - #3: Predicting the happiness of an individual given demographic information.
-- Predicting the immigration views, social views, and ethical values of an individual.
+- #4: Predicting the immigration views, social views, and ethical values of an individual.
 - The relationship between income (Q288), happiness (Q46), and health (Q47).
 - The relationship between marital status (Q273) and political engagement (Q209 - Q222).
 - The relationship between religious denomination (Q289) and number of children (Q274).
@@ -215,7 +215,8 @@ Having understood how different variables correlate, we can transition to applyi
 
 In the tolerance tree, we sought to explore attitudes towards immigration in relation to a key value: tolerance. By setting up a decision tree with two questions on immigration that are in some ways in conflict with one another, we sought to answer the question, "how do those who believe tolerance is an important teaching for children feel about immigrants in their immediate lives, and more broadly, as a threat to security?" The two variables employed to answer this question are to the effect of, "does immigration increase the risk of terrorism?" and "would you like to have immigrants as neighbors?"
 
-#### Tolerance Tree
+#### Business Question #4: Predicting the immigration views, social views, and ethical values of an individual. 
+The following decision trees predicts the importance of teaching children tolerance based on 2 immigration viewpoints: friendliness towards immigrants as neighbors, and whether immigration increases the risk of terrorism. 
 ```{r}
 # sub-setting data
 tree_subset <- 
