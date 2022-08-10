@@ -303,7 +303,7 @@ It may be assumed that immigration viewpoints would be a strong predictor of imp
 * Within the much smaller cohort that responded that they wouldn't like having immigrants as neighbors - *22%* - 10% are neutral or disagree with the question of whether immgiration increases the risk of terrorism. I'll include this group in the somewhat supportive of immigration category. This group also believes in teaching tolerance to children, though by a slim margin of about 6%. 
 * In contrast, 12% of respondents agree that immgiration increases the risk of terrorism, and responded negatively to the idea of being neighbors with immigrants. This group is classified as the most infavorable to immigration. Still, 59% of this group believes in teaching tolerance to children.
 
-###### Based on my classification system, respondents fall into the following categories regarding immigration viewpoints: 27% oare very supportive, 44% are somewhat supportive, 18% are neutral or unsure, and 12% are not supportive.
+###### Based on this classification system, respondents fall into the following categories regarding immigration viewpoints: 27% are very supportive, 44% are somewhat supportive, 18% are neutral or unsure, and 12% are not supportive.
 
 
 ```{r}
