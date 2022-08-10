@@ -216,7 +216,7 @@ Having understood how different variables correlate, we can transition to applyi
 ... explain reason for choosing decision tree / what business question(s) we hope to answer using this approach ...
 In the tolerance tree, we sought to explore attitudes towards immigration. By setting up a decision tree with two questions on immgiration that are in some ways in confict with one another, we sought to answer the question, "how do those who believe tolerance is an important teaching for children feel about immigrants in their immediate lives, and more broadly, as a threat to security?" The two variables employed to answer this question are to the effect of, "does immigration increase the risk of terrorism?" and "would you like to have immigrants as neighbors?"
 
-### Tolerance Tree
+#### Tolerance Tree
 ```{r}
 # sub-setting data
 tree_subset <- 
@@ -291,13 +291,10 @@ table(tree_pred, test$Tolerance.Important.For.Children)
 confusionMatrix(as.factor(tree_pred), as.factor(test$Tolerance.Important.For.Children))
 # 63% accuracy. Decision trees tend to over fit accuracy without extensive preparation to the training and test partitions.
 ```
-### Findings on tolerance
+#### Findings
 It may be assumed that immigration viewpoints would be a strong predictor of importance of teaching children tolerance. If people view immigrants as an important aspect of their home home country culture and communities, we would likely describe them as tolerant, among other things. Therefore, analyzing the results of the decision tree with one positive question about immigration and one negative, it's interesting to see the results on the leaves, which all land close the 50/50 line, with tolerance being important teaching for children holding the majority in each leaf. 
 
-## this paragraph will be moved to our conclusion
-The tolerance tree illustrates that 78% of respondents responded favorably or neutrally to having immigrants as neighbors. Within this cohort, 27% of respondents do not want immigrants as neighbors but do not think that immigrants increase the risk of terrorism. These people are hesitant about immigrants in their immediate vicinity but don't fear them on a national level. In contrast, 12% of respondents feel that immigration increases the risk of terrorism but feel neutrally or positively about have immigrants as neighbors. All in all, that's 39% of respondents that hold different, somewhat conflicting views about immigrants as neighbors and as a threat to domestic security. 
-
-### Leaf interpretation from left
+#### Leaf Interpretation (L-R)
 * The vast majority of respondents - *78%* - are neutral of positive about the prospect of having neighbors that have immigrated from other countries.
 * Of these 78%, 34% of respondents are neutral or positive about immigrants as neighbors, and responded that immigration increases the risk of terrorism. I'll classify this group as somewhat supportive of immigration (open to immigration in their immediate community and wary of immigration in their country). Within this leaf, 65% believe in the importance of teaching children tolerance (the highest among the leaves).
 * 27% are neutral or positive about immigrants as neighbors, and disagree that immigration increases the risk of terrorism. I'll classify this group as most open to immigration. Within this leaf, 64% believe in the importance of teaching tolerance to children.
@@ -305,7 +302,7 @@ The tolerance tree illustrates that 78% of respondents responded favorably or ne
 * Within the much smaller cohort that responded that they wouldn't like having immigrants as neighbors - *22%* - 10% are neutral or disagree with the question of whether immgiration increases the risk of terrorism. I'll include this group in the somewhat supportive of immigration category. This group also believes in teaching tolerance to children, though by a slim margin of about 6%. 
 * In contrast, 12% of respondents agree that immgiration increases the risk of terrorism, and responded negatively to the idea of being neighbors with immigrants. This group is classified as the most infavorable to immigration. Still, 59% of this group believes in teaching tolerance to children.
 
-##### Based on my classification system, respondents fall into the following categories regarding immigration viewpoints: 27% oare very supportive, 44% are somewhat supportive, 18% are neutral or unsure, and 12% are not supportive.
+###### Based on my classification system, respondents fall into the following categories regarding immigration viewpoints: 27% oare very supportive, 44% are somewhat supportive, 18% are neutral or unsure, and 12% are not supportive.
 
 
 ```{r}
@@ -377,6 +374,8 @@ confusionMatrix(religion_tree_model_matrix)
 
 ## Interpretation
 - Key takeaways, connecting findings and ideas to big picture of values
+
+The tolerance tree illustrates that 78% of respondents responded favorably or neutrally to having immigrants as neighbors. Within this cohort, 27% of respondents do not want immigrants as neighbors but do not think that immigrants increase the risk of terrorism. These people are hesitant about immigrants in their immediate vicinity but don't fear them on a national level. In contrast, 12% of respondents feel that immigration increases the risk of terrorism but feel neutrally or positively about have immigrants as neighbors. All in all, that's 44% of respondents that hold different, somewhat conflicting views about immigrants as neighbors and as a threat to domestic security. Investigating other values that may be driving this discrepency in immigration attitudes would be a good use of the values dataset. 
 
 ## Recommendations
 - Next steps for our final week of class // final report
