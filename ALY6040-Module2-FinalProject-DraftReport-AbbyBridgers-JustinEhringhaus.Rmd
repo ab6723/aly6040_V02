@@ -232,20 +232,41 @@ prop.table(table(tree_subset$Tolerance.Important.For.Children))
 prop.table(table(tree_subset$Immigration.Increases.Terrorism.Risk))
 
 # partition prep
-set.seed(1234)
+set.seed(1000)
 # remove NAs
 tree_subset <- na.omit(tree_subset)
 
 # partition
 data_partition<-createDataPartition(y=tree_subset$Tolerance.Important.For.Children, p=0.8, list=FALSE)
-train<-na.omit(tree_subset[data_partition,]) #head added for now
-test<-tree_subset[-data_partition,]
+train <- na.omit(tree_subset[data_partition,])
+test <- tree_subset[-data_partition,]
 
 # checking partition and NA omits
 nrow(tree_subset)
 nrow(train)
 nrow(test)
 head(train)
+
+# tree plotting
+library(rpart)
+equation = Tolerance.Important.For.Children~Immigrants.As.Neighbors+Immigration.Increases.Terrorism.Risk
+
+tolerance_tree <- rpart(formula = equation, 
+                 data = train,
+                 method = 'class',
+                minsplit=2,
+                cp=-1,
+                 minbucket = 2,
+                parms = list(split = 'gini'))
+
+summary(tolerance_tree)
+
+# tree visualization
+library(rattle)
+library(rpart.plot)
+rpart.plot(tolerance_tree, box.palette="BlGnYl")
+fancyRpartPlot(tolerance_tree, caption = "Health")
+
 ```
 
 ```{r}
