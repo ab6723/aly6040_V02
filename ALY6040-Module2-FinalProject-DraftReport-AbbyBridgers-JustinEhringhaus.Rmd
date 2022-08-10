@@ -252,7 +252,9 @@ tolerance_tree <- rpart(formula = Tolerance.Important.For.Children ~.,
                  #minbucket = 2,
                 #parms = list(split = 'gini')
                 )
+
 summary(tolerance_tree)
+
 # tree visualization
 library(rattle)
 library(rpart.plot)
@@ -263,12 +265,15 @@ fancyRpartPlot(tolerance_tree, caption = "Predicting Importance of Teaching Chil
                                   # 0.6282186    0.3717814
 # Immigration increases terrorism risk: # 2 = agree, 1 = unsure, 0 = disagree
                                         # 0.4558246,  0.2214990,  0.3226764
+
 # Variable of importance
 tolerance_tree$variable.importance # immigrants as neighbors
+
 # Test variable prediction
 tree_pred<-predict(tolerance_tree,newdata=test,
                    type = 'class',
                    prob = TRUE)
+
 # Measure model performance
 library(caret)
 table(tree_pred, test$Tolerance.Important.For.Children)
@@ -411,6 +416,8 @@ fancyRpartPlot(happiness_tree_model,
 
 ## Interpretation
 - Key takeaways, connecting findings and ideas to big picture of values
+
+The tolerance tree illustrates that 78% of respondents responded favorably or neutrally to having immigrants as neighbors. Within this cohort, 27% of respondents do not want immigrants as neighbors but do not think that immigrants increase the risk of terrorism. These people are hesitant about immigrants in their immediate vicinity but don't fear them on a national level. In contrast, 12% of respondents feel that immigration increases the risk of terrorism but feel neutrally or positively about have immigrants as neighbors. All in all, that's 44% of respondents that hold different, somewhat conflicting views about immigrants as neighbors and as a threat to domestic security. Investigating other values that may be driving this discrepancy in immigration attitudes would be a good use of the values dataset. 
 
 ## Recommendations
 - Next steps for our final week of class // final report
