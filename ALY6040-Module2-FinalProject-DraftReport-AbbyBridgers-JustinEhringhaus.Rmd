@@ -214,7 +214,8 @@ Having understood how different variables correlate, we can transition to applyi
 ## Data Mining Techniques and Interpretations
 
 ... explain reason for choosing decision tree / what business question(s) we hope to answer using this approach ...
-In the tolerance tree, we sought to explore attitudes towards immigration. By setting up a decision tree with two questions on immgiration that are in some ways in confict with one another, we sought to answer the question, "how do those who believe tolerance is an important teaching for children feel about immigrants in their immediate lives, and more broadly, as a threat to security?" The two variables employed to answer this question are to the effect of, "does immigration increase the risk of terrorism?" and "would you like to have immigrants as neighbors?"
+
+In the tolerance tree, we sought to explore attitudes towards immigration in relation to a key value: tolerance. By setting up a decision tree with two questions on immigration that are in some ways in conflict with one another, we sought to answer the question, "how do those who believe tolerance is an important teaching for children feel about immigrants in their immediate lives, and more broadly, as a threat to security?" The two variables employed to answer this question are to the effect of, "does immigration increase the risk of terrorism?" and "would you like to have immigrants as neighbors?"
 
 #### Tolerance Tree
 ```{r}
@@ -375,7 +376,7 @@ confusionMatrix(religion_tree_model_matrix)
 ## Interpretation
 - Key takeaways, connecting findings and ideas to big picture of values
 
-The tolerance tree illustrates that 78% of respondents responded favorably or neutrally to having immigrants as neighbors. Within this cohort, 27% of respondents do not want immigrants as neighbors but do not think that immigrants increase the risk of terrorism. These people are hesitant about immigrants in their immediate vicinity but don't fear them on a national level. In contrast, 12% of respondents feel that immigration increases the risk of terrorism but feel neutrally or positively about have immigrants as neighbors. All in all, that's 44% of respondents that hold different, somewhat conflicting views about immigrants as neighbors and as a threat to domestic security. Investigating other values that may be driving this discrepency in immigration attitudes would be a good use of the values dataset. 
+The tolerance tree illustrates that 78% of respondents responded favorably or neutrally to having immigrants as neighbors. Within this cohort, 27% of respondents do not want immigrants as neighbors but do not think that immigrants increase the risk of terrorism. These people are hesitant about immigrants in their immediate vicinity but don't fear them on a national level. In contrast, 12% of respondents feel that immigration increases the risk of terrorism but feel neutrally or positively about have immigrants as neighbors. All in all, that's 44% of respondents that hold different, somewhat conflicting views about immigrants as neighbors and as a threat to domestic security. Investigating other values that may be driving this discrepancy in immigration attitudes would be a good use of the values dataset. 
 
 ## Recommendations
 - Next steps for our final week of class // final report
