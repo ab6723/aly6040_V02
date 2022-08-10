@@ -279,8 +279,21 @@ fancyRpartPlot(tolerance_tree, caption = "Predicting Importance of Teaching Chil
 
 # Of the 78% of respondents that indicated they'd like to have immigrants as neighbors, 40% of respondents agreed with the statement, "immigration increases the risk of terrorism." This group, comprising 18% of the total respondents included in the tree is not comprehensive as NAs were omitted for analysis. However, it is still an interesting finding that 18% of those responses included hold a somewhat contradictory set of beliefs; immigrants increase risk of terrorism, but they don't voice a hesitancy to have immigrants as neighbors. 
 
-#
+# Variable of importance
+tolerance_tree$variable.importance # immigrants as neighbors
+
+# Test variable prediction
+tree_pred<-predict(tolerance_tree,newdata=test,
+                   type = 'class',
+                   prob = TRUE)
+
+# Measure model performance
+library(caret)
+table(tree_pred, test$Tolerance.Important.For.Children)
+confusionMatrix(as.factor(tree_pred), as.factor(test$Tolerance.Important.For.Children))
+# 63% accuracy. Decision trees tend to overfit accuracy without extensive preparation to the training and test partitions.
 ```
+
 
 ```{r}
 # Predicting the religious affiliation of an individual.
