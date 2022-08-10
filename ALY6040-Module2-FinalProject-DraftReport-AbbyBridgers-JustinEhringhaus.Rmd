@@ -323,10 +323,14 @@ summary(religion_tree_model)
 # Visualize the decision tree with rpart.plot
 rpart.plot(religion_tree_model, nn = TRUE)
 fancyRpartPlot(religion_tree_model, 
-               main = "Predicting Religious Denomination\nBased on Social Views and Ethical Values",
+               main = "Predicting Religious Denomination\n-- a question of social views and town size --",
                caption = "0 = None\n1 = Roman Catholic\n5 = Muslim",
                type = 5)
 ```
+
+`sex.before.marriage` = 
+`Town.size` = 
+`homosexuality` = 
 
 # Religions:
 # 0 = Do not belong to a denomination
@@ -381,12 +385,15 @@ summary(immigrant_tree_model)
 
 # Visualize the decision tree with rpart.plot
 fancyRpartPlot(immigrant_tree_model, 
-               main = "Predicting Whether an Immigrant (2) or a Nonimmigrant (1)",
-               caption = "votes.locally = 1 (always) to 4 (not allowed)
-               job.scarc.prioritizes.nonimm = 1 (agree strongly) to 5 (disagree strongly)
-               votes.nationally = 1 (always) to 4 (not allowed)",
+               main = "Predicting Immigrant Status\n-- a question of political participation, immigration beliefs, and age --",
+               caption = "",
                type = 5)
 ```
+
+`votes.locally` = 1 (always) to 4 (not allowed)
+`job.scarc.prioritizes.nonimm` = 1 (agree strongly) to 5 (disagree strongly)
+`Age` = ...
+`votes.nationally` = 1 (always) to 4 (not allowed)"
 
 ```{r}
 #Testing the model
