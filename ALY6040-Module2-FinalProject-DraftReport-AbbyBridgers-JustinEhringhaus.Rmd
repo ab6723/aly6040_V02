@@ -290,7 +290,7 @@ In each of our decision trees, 80% of the data will randomly be placed into a tr
 
 The major question to ask of a decision tree is whether the model is too complex, too specific, or too sensitive. In other words, did the recursive process of splitting the data into groups and subgroups continue on for too long. When should the splitting stop? For each of our business questions, we will apply the decision tree to our test data and then to our train data to assess and explain the model's accuracy.
 
-### Business Question #1: Classifying Immigrants versus Nonimmigrants
+##### Business Question #1: Classifying Immigrants versus Nonimmigrants
 
 In this first decision tree, we seek to understand what variables are most indicative of whether or not someone is an immigrant. A human posed with this same question might list a number of factors such as education, income, or number of children, but these would be biased. A decision tree, on the other hand, will assess all relationships between all variables in the dataset to produce a simple rule-based model.
 
@@ -313,8 +313,6 @@ immigrant_tree_test <- immigrant_tree[-immigrant_tree_partition, ]
 immigrant_tree_model <- rpart(formula = Immigrant ~ .,
                               data = immigrant_tree_train,
                               method = "class")
-
-summary(immigrant_tree_model)
 
 # Visualize the decision tree with rpart.plot
 fancyRpartPlot(immigrant_tree_model, 
@@ -342,7 +340,7 @@ confusionMatrix(immigrant_tree_model_matrix)
 
 This model is highly accurate (94.77%)! This shows that the model does a good job on unseen data. 
 
-### Business Question #2: Predicting whether an individual views teaching tolerance as important based on their beliefs regarding immigration 
+##### Business Question #2: Predicting whether an individual views teaching tolerance as important based on their beliefs regarding immigration 
 
 In this second decision tree, we seek to understand attitudes towards immigration in relation to a key value: tolerance. By setting up a decision tree with two questions on immigration that are in some ways in conflict with one another, we sought to answer the question, "how do those who believe tolerance is an important teaching for children feel about immigrants in their immediate lives, and more broadly, as a threat to security?" The two variables employed to answer this question are to the effect of, "does immigration increase the risk of terrorism?" and "would you like to have immigrants as neighbors?"
 
@@ -385,8 +383,6 @@ tolerance_tree <- rpart(formula = Tolerance.Important.For.Children ~.,
                 #parms = list(split = 'gini')
                 )
 
-summary(tolerance_tree)
-
 # tree visualization
 library(rattle)
 library(rpart.plot)
@@ -427,7 +423,7 @@ It may be assumed that immigration viewpoints would be a strong predictor of imp
 
 Based on this classification system, respondents fall into the following categories regarding immigration viewpoints: 27% are very supportive, 44% are somewhat supportive, 18% are neutral or unsure, and 12% are not supportive. The question of whether those who emphasize tolerance to their children display tolerance towards immigrants in their home country is answered; every category classified by immigration viewpoints, including those with negative attitudes, responded that they believe in teaching tolerance to children.
 
-### Business Question #3: Classifying Religious Denominations
+##### Business Question #3: Classifying Religious Denominations
 
 In this third decision tree, we seek to understand what variables are most indicative of religious denomination. A human may observe the foods someone eats or the rituals someone practices to determine this, but it will be interested to feed variables in our dataset to a decision tree to understand which factors are found to be most important in this classification task.
 
@@ -451,10 +447,7 @@ religion_tree_model <- rpart(formula = Religion ~ .,
                              data = religion_tree_train,
                              method = "class")
 
-summary(religion_tree_model)
-
 # Visualize the decision tree with rpart.plot
-rpart.plot(religion_tree_model, nn = TRUE)
 fancyRpartPlot(religion_tree_model, 
                main = "Decision Tree #3: Religious Denomination\n-- a question social views, ethical values, and town size --",
                caption = "0 = No religion, 1 = Roman Catholic, 5 = Muslim",
@@ -483,7 +476,7 @@ confusionMatrix(religion_tree_model_matrix)
 
 This model is highly inaccurate (38.45%)! This shows that the model does a poor job on unseen data. A possible reason for this is the skewness in the distributions of data on different religious denominations. A recommended next step would be to employ random sampling techniques on the dataset to normalize the distributions of each religious denomination prior to creating training and test splits.
 
-### Business Question #4: Predicting Confidence in Elections
+##### Business Question #4: Predicting Confidence in Elections
 
 In this fourth and final decision tree, we seek to answer the question of whether those who have faith in elections also have faith in the courts and the United Nations (UN). Elections operate as the bedrock of democracy, but in countries without democracy, elections are often futile systems (or at least perceived to be). 
 
@@ -519,12 +512,10 @@ four_model <- rpart(formula = confidence.elections ~ .,
                              data = four_train,
                              method = "class")
 
-summary(four_model)
-
 # Visualize the decision tree with rpart.plot
 fancyRpartPlot(four_model, 
                main = "Decision Tree #4: Predicting Confidence in Elections",
-               caption = "Confidence Level: 1 = A great deal, 2 = Quite a lot, 3 = Not very much, 4 = Not a lot",
+               caption = "Confidence Level:\n1 = A great deal, 2 = Quite a lot, 3 = Not very much, 4 = Not a lot",
                type = 5)
 ```
 
@@ -592,3 +583,5 @@ Humans are complex. We are moderately to extremely consistent on some things (e.
 - We will be selecting aspects of our analysis to include in a PowerPoint presentation for classmates next Wednesday, which will require zeroing in on a select few analyses that are visually-focused, namely graphs and decision tress.
 - Future analysis would touch on those issues that we were not able to cover. These included the relationship between education completed (Q275) and the importance of leisure time (Q3); the relationship between income (Q288), happiness (Q46), and health (Q47); and the relationship between marital status (Q273) and political engagement (Q209 - Q222).
 - Future analysis would include more advanced predictive modeling techniques, starting with random forests. We cannot know what we have not yet studied, but we would hope to find other useful modeling techniques beyond decision trees that pair well with ordinal (Likert) data!
+
+## Works Cited
