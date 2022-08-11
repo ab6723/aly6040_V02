@@ -50,7 +50,7 @@ CHECK THIS, ORDERING / TITLES
 - #1: Predicting the religious affiliation of an individual given their social views and ethical values.
 - #2: Predicting the happiness of an individual given demographic information.
 - #3: Predicting the immigration views, social views, and ethical values of an individual.
-- #4: The relationship between confidence in the United Nations (Q83), elections (Q76), and the courts (Q70)
+- #4: The relationship between confidence in the United Nations, elections, and the courts.
 
 ##### Missing data? Duplicates? Cleanliness? Outliers?
 
@@ -414,10 +414,9 @@ tree_pred<-predict(tolerance_tree,newdata=test,
 library(caret)
 table(tree_pred, test$Tolerance.Important.For.Children)
 confusionMatrix(as.factor(tree_pred), as.factor(test$Tolerance.Important.For.Children))
-# 63% accuracy. Decision trees tend to over fit accuracy without extensive preparation to the training and test partitions.
 ```
 #### Findings
-It may be assumed that immigration viewpoints would be a strong predictor of importance of teaching children tolerance. If people view immigrants as an important aspect of their home home country culture and communities, we would likely describe them as tolerant, among other things. Therefore, analyzing the results of the decision tree with one positive question about immigration and one negative, it's interesting to see the results on the leaves, which all land close the 50/50 line, with tolerance being important teaching for children holding the majority in each leaf. 
+It may be assumed that immigration viewpoints would be a strong predictor of importance of teaching children tolerance. If people view immigrants as an important aspect of their home home country culture and communities, we would likely describe them as tolerant, among other things. Therefore, analyzing the results of the decision tree with one positive question about immigration and one negative, it's interesting to see the results on the leaves, which all land close the 50/50 line, with tolerance being important teaching for children holding the majority in each leaf. The decision tree is 63% accurate. Decision trees tend to over fit accuracy without extensive preparation to the training and test partitions.
 
 #### Tolerance Importance: Leaf Interpretation (L-R)
 * The vast majority of respondents - *78%* - are neutral of positive about the prospect of having neighbors that have immigrated from other countries.
@@ -427,7 +426,7 @@ It may be assumed that immigration viewpoints would be a strong predictor of imp
 * Within the much smaller cohort that responded that they wouldn't like having immigrants as neighbors - *22%* - 10% are neutral or disagree with the question of whether immigiration increases the risk of terrorism. I'll include this group in the somewhat supportive of immigration category. This group also believes in teaching tolerance to children, though by a slim margin of about 6%. 
 * In contrast, 12% of respondents agree that immgiration increases the risk of terrorism, and responded negatively to the idea of being neighbors with immigrants. This group is classified as the most unfavorable to immigration. Still, 59% of this group believes in teaching tolerance to children.
 
-###### Based on this classification system, respondents fall into the following categories regarding immigration viewpoints: 27% are very supportive, 44% are somewhat supportive, 18% are neutral or unsure, and 12% are not supportive. The question of whether those who emphasize tolerance to their children display tolerance towards immigrants in their home country is answered; every category classified by immigration viewpoints, including those with negative attitudes, responded that they believe in teaching tolerance to children.
+#### Based on this classification system, respondents fall into the following categories regarding immigration viewpoints: 27% are very supportive, 44% are somewhat supportive, 18% are neutral or unsure, and 12% are not supportive. The question of whether those who emphasize tolerance to their children display tolerance towards immigrants in their home country is answered; every category classified by immigration viewpoints, including those with negative attitudes, responded that they believe in teaching tolerance to children.
 
 ### Business Question #2: Predicting the religious affiliation of an individual given social views and ethical values.
 
@@ -493,7 +492,7 @@ confusionMatrix(religion_tree_model_matrix)
 ... talk about accuracy ...
 
 ## Business Question #5: The relationship between confidence in the United Nations (Q83), elections (Q76), and the courts (Q70).
-The following decision tree answers the question of whether those who have faith in elections also have faith in the courts, and the United Nations (UN). Elections operate as the bedrock of democracy, but in countries without democracy, elections are often futile (or at least perceived to be). Therefore, it's worthwhile and interesting to assess the relationship, if any, between confidence in these 3 organizations. A decision tree was chosen for this reason, and because these questions were answered on the same Likert scale, making for a clearer classification from the algorithm.
+The following decision tree answers the question of whether those who have faith in elections also have faith in the courts, and the United Nations (UN). Elections operate as the bedrock of democracy, but in countries without democracy, elections are often futile systems (or at least perceived to be). Therefore, it's worthwhile and interesting to assess the relationship, if any, between confidence in these 3 organizations. A decision tree was chosen for this reason, and because these questions were answered on the same Likert scale, making for a clearer classification from the algorithm.
 
 ```{r}
 tree_four <- 
@@ -519,7 +518,7 @@ four_model <- rpart(formula = confidence.elections ~ .,
 summary(four_model)
 
 # Visualize the decision tree with rpart.plot
-rpart.plot(four_model, nn = TRUE)
+# rpart.plot(four_model, nn = TRUE)
 fancyRpartPlot(four_model, 
                main = "Predicting Confidence in Elections",
                caption = "Confidence Level: 1 = A great deal, 2 = Quite a lot, 3 = Not very much, 4 = Not a lot",
@@ -554,7 +553,7 @@ table(four_pred, four_test$confidence.elections)
 confusionMatrix(as.factor(four_pred), as.factor(four_test$confidence.elections))
 ```
 
-Model accuracy is 54%. 
+Model accuracy is 54%. Decision trees do not consider the interdependence of variables when calculating a split, so using a random forrest instead of one decision tree results in a more accurate model. Another way to improve accuracy is k-fold cross validation. For the purposes of this business question, the model and it's accuracy suffice. 
 
 ## Interpretation
 - Key takeaways, connecting findings and ideas to big picture of values
