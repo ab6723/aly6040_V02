@@ -3,10 +3,9 @@ title: "Module 4 Final Project — Milestone 2: Draft Report"
 author: Abby Bridgers and Justin Ehringhaus
 date: Last edited `r format(Sys.time(), '%B %d, %Y')` at `r format(Sys.time(), '%H:%M')`
 output:
-  html_document: 
+  github_document: 
     toc: true
     toc_depth: 5
-  # github_document: default
 bibliography: "references.bib"
 nocite: '@*'
 ---
