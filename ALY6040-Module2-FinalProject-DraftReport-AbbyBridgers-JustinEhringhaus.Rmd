@@ -58,6 +58,7 @@ We analyze particular subsets of the dataset using data mining techniques such a
 - #2: Predicting the religious affiliation of an individual given their social views and ethical values.
 - #3: Predicting the happiness of an individual given demographic information.
 - #4: Predicting the immigration views, social views, and ethical values of an individual.
+- #5: The relationship between confidence in the United Nations (Q83), elections (Q76), and the courts (Q70)
 - The relationship between income (Q288), happiness (Q46), and health (Q47).
 - The relationship between marital status (Q273) and political engagement (Q209 - Q222).
 - The relationship between religious denomination (Q289) and number of children (Q274).
@@ -216,7 +217,7 @@ Having understood how different variables correlate, we can transition to applyi
 In the tolerance tree, we sought to explore attitudes towards immigration in relation to a key value: tolerance. By setting up a decision tree with two questions on immigration that are in some ways in conflict with one another, we sought to answer the question, "how do those who believe tolerance is an important teaching for children feel about immigrants in their immediate lives, and more broadly, as a threat to security?" The two variables employed to answer this question are to the effect of, "does immigration increase the risk of terrorism?" and "would you like to have immigrants as neighbors?"
 
 #### Business Question #4: Predicting the immigration views, social views, and ethical values of an individual. 
-The following decision trees predicts the importance of teaching children tolerance based on 2 immigration viewpoints: friendliness towards immigrants as neighbors, and whether immigration increases the risk of terrorism. 
+The following decision tree predicts the importance of teaching children tolerance based on 2 immigration viewpoints: friendliness towards immigrants as neighbors, and whether immigration increases the risk of terrorism. 
 ```{r}
 # sub-setting data
 tree_subset <- 
@@ -284,13 +285,13 @@ confusionMatrix(as.factor(tree_pred), as.factor(test$Tolerance.Important.For.Chi
 #### Findings
 It may be assumed that immigration viewpoints would be a strong predictor of importance of teaching children tolerance. If people view immigrants as an important aspect of their home home country culture and communities, we would likely describe them as tolerant, among other things. Therefore, analyzing the results of the decision tree with one positive question about immigration and one negative, it's interesting to see the results on the leaves, which all land close the 50/50 line, with tolerance being important teaching for children holding the majority in each leaf. 
 
-#### Leaf Interpretation (L-R)
+#### Tolerance Importance: Leaf Interpretation (L-R)
 * The vast majority of respondents - *78%* - are neutral of positive about the prospect of having neighbors that have immigrated from other countries.
 * Of these 78%, 34% of respondents are neutral or positive about immigrants as neighbors, and responded that immigration increases the risk of terrorism. I'll classify this group as somewhat supportive of immigration (open to immigration in their immediate community and wary of immigration in their country). Within this leaf, 65% believe in the importance of teaching children tolerance (the highest among the leaves).
 * 27% are neutral or positive about immigrants as neighbors, and disagree that immigration increases the risk of terrorism. I'll classify this group as most open to immigration. Within this leaf, 64% believe in the importance of teaching tolerance to children.
 * 18% are neutral or positive about immigrants as neighbors, and unsure about the risk they pose to terrorism. This group is neutral. 
-* Within the much smaller cohort that responded that they wouldn't like having immigrants as neighbors - *22%* - 10% are neutral or disagree with the question of whether immgiration increases the risk of terrorism. I'll include this group in the somewhat supportive of immigration category. This group also believes in teaching tolerance to children, though by a slim margin of about 6%. 
-* In contrast, 12% of respondents agree that immgiration increases the risk of terrorism, and responded negatively to the idea of being neighbors with immigrants. This group is classified as the most infavorable to immigration. Still, 59% of this group believes in teaching tolerance to children.
+* Within the much smaller cohort that responded that they wouldn't like having immigrants as neighbors - *22%* - 10% are neutral or disagree with the question of whether immigiration increases the risk of terrorism. I'll include this group in the somewhat supportive of immigration category. This group also believes in teaching tolerance to children, though by a slim margin of about 6%. 
+* In contrast, 12% of respondents agree that immgiration increases the risk of terrorism, and responded negatively to the idea of being neighbors with immigrants. This group is classified as the most unfavorable to immigration. Still, 59% of this group believes in teaching tolerance to children.
 
 ###### Based on this classification system, respondents fall into the following categories regarding immigration viewpoints: 27% are very supportive, 44% are somewhat supportive, 18% are neutral or unsure, and 12% are not supportive.
 
@@ -378,7 +379,7 @@ immigrant_tree_test <- immigrant_tree[-immigrant_tree_partition, ]
 
 # building the classification tree with rpart
 immigrant_tree_model <- rpart(formula = Immigrant ~ .,
-                              data = happiness_tree_train,
+                              data = immigrant_tree_train,
                               method = "class")
 
 summary(immigrant_tree_model)
@@ -403,6 +404,67 @@ confusionMatrix(immigrant_tree_model_matrix)
 ```
 
 ... talk about accuracy ...
+
+## Business Question #5: The relationship between confidence in the United Nations (Q83), elections (Q76), and the courts (Q70)
+
+```{r}
+tree_four <- 
+  wvs_subset %>% 
+  select(-Longitude, -Latitude, -Country.and.year, -Ethnic.Group, -Country)
+
+# partition prep
+set.seed(1200)
+
+# remove NAs
+tree_four <- na.omit(tree_four)
+
+# partition
+four_partition <- createDataPartition(y = tree_four$confidence.elections, p = 0.8, list = FALSE)
+four_train <- na.omit(tree_four[four_partition, ])
+four_test <- tree_four[-four_partition, ]
+
+# building the classification tree with rpart
+four_model <- rpart(formula = confidence.elections ~ .,
+                             data = four_train,
+                             method = "class")
+
+summary(four_model)
+
+# Visualize the decision tree with rpart.plot
+rpart.plot(four_model, nn = TRUE)
+fancyRpartPlot(four_model, 
+               main = "Predicting Confidence in Elections",
+               caption = "Confidence Level: 1 = A great deal, 2 = Quite a lot, 3 = Not very much, 4 = Not a lot",
+               type = 4)
+```
+
+* The response scale is the same among each of the variables included in this decision tree. Confidence in courts and confidence in the United Nations (UN) are used to predict confidence in elections. 
+
+## Confidence in Elections: Leaf Interpretation (L-R)
+* High and low confidence in the courts is split almost 50/50, with 51% of respondents reporting at least quite a bit of confidence in the court, and 49% of respondents reporting less than or equal to not very much confidence in the court system. 
+* 5% of respondents have a great deal of confidence in the UN, courts, and elections. This means that only 1 in 20 people have a lot of confidence in all 3 bodies in their country.
+* 9% of respondents have a great deal of confidence in courts, and quite a lot of confidence in the UN and elections.
+* 37% of respondents have quite a lot of confidence in courts and elections.
+* 32% of respondents have not very much confidence in courts, or elections.
+* 17% of respondents have not a lot of confidence in courts or elections.
+
+### Testing Election Confidence Model Accuracy
+```{r}
+# Variable of importance
+four_model$variable.importance # confidence in courts
+
+# Test variable prediction
+four_pred<-predict(four_model,newdata=four_test,
+                   type = 'class',
+                   prob = TRUE)
+
+# Measure model performance
+library(caret)
+table(four_pred, four_test$confidence.elections)
+confusionMatrix(as.factor(four_pred), as.factor(four_test$confidence.elections))
+```
+
+Model accuracy is 54%. 
 
 ## Interpretation
 - Key takeaways, connecting findings and ideas to big picture of values
