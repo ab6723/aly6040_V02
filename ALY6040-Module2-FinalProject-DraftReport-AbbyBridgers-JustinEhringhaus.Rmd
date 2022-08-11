@@ -51,7 +51,7 @@ While there was missing data found in our dataset, we elected to refrain from cl
 
 ##### Methods
 
-We analyze particular subsets of the dataset using data mining techniques such as ..., ..., and ... .
+We analyze particular subsets of the dataset using decision tree analysis. We chose decision tree because of our restriction to ordinal (Likert) data; we have a select few attributes of numerical data, but they're primarily demographic information as opposed to data on values, which is our point of interest. Therefore, we decided to orient our analysis around a deep-dive on decision trees. We completed four decision trees inspired by the four business questions listed below, which drawn from our exploratory data analysis insights and interests. 
 
 ##### Business questions
 
@@ -217,7 +217,8 @@ Having understood how different variables correlate, we can transition to applyi
 In the tolerance tree, we sought to explore attitudes towards immigration in relation to a key value: tolerance. By setting up a decision tree with two questions on immigration that are in some ways in conflict with one another, we sought to answer the question, "how do those who believe tolerance is an important teaching for children feel about immigrants in their immediate lives, and more broadly, as a threat to security?" The two variables employed to answer this question are to the effect of, "does immigration increase the risk of terrorism?" and "would you like to have immigrants as neighbors?"
 
 #### Business Question #4: Predicting the immigration views, social views, and ethical values of an individual. 
-The following decision tree predicts the importance of teaching children tolerance based on 2 immigration viewpoints: friendliness towards immigrants as neighbors, and whether immigration increases the risk of terrorism. 
+The following decision tree predicts the importance of teaching children tolerance based on 2 immigration viewpoints: friendliness towards immigrants as neighbors, and whether immigration increases the risk of terrorism. Decision tree was chosen as the mode of analysis because it provides a thorough answer to the question of whether those who emphasize tolerance to their children display tolerance towards immigrants in their home country.
+
 ```{r}
 # sub-setting data
 tree_subset <- 
@@ -293,7 +294,7 @@ It may be assumed that immigration viewpoints would be a strong predictor of imp
 * Within the much smaller cohort that responded that they wouldn't like having immigrants as neighbors - *22%* - 10% are neutral or disagree with the question of whether immigiration increases the risk of terrorism. I'll include this group in the somewhat supportive of immigration category. This group also believes in teaching tolerance to children, though by a slim margin of about 6%. 
 * In contrast, 12% of respondents agree that immgiration increases the risk of terrorism, and responded negatively to the idea of being neighbors with immigrants. This group is classified as the most unfavorable to immigration. Still, 59% of this group believes in teaching tolerance to children.
 
-###### Based on this classification system, respondents fall into the following categories regarding immigration viewpoints: 27% are very supportive, 44% are somewhat supportive, 18% are neutral or unsure, and 12% are not supportive.
+###### Based on this classification system, respondents fall into the following categories regarding immigration viewpoints: 27% are very supportive, 44% are somewhat supportive, 18% are neutral or unsure, and 12% are not supportive. The question of whether those who emphasize tolerance to their children display tolerance towards immigrants in their home country is answered; every category classified by immigration viewpoints, including those with negative attitudes, responded that they believe in teaching tolerance to children.
 
 ### Business Question #2: Predicting the religious affiliation of an individual given social views and ethical values.
 
@@ -405,7 +406,8 @@ confusionMatrix(immigrant_tree_model_matrix)
 
 ... talk about accuracy ...
 
-## Business Question #5: The relationship between confidence in the United Nations (Q83), elections (Q76), and the courts (Q70)
+## Business Question #5: The relationship between confidence in the United Nations (Q83), elections (Q76), and the courts (Q70).
+The following decision tree answers the question of whether those who have faith in elections also have faith in the courts, and the United Nations (UN). Elections operate as the bedrock of democracy, but in countries without democracy, elections are often futile (or at least perceived to be). Therefore, it's worthwhile and interesting to assess the relationship, if any, between confidence in these 3 organizations. A decision tree was chosen for this reason, and because these questions were answered on the same Likert scale, making for a clearer classification from the algorithm.
 
 ```{r}
 tree_four <- 
@@ -476,5 +478,6 @@ The tolerance tree illustrates that 78% of respondents responded favorably or ne
 A more straightforward decision tree can be found in the political systems tree, which predicts confidence in elections using confidence in the UN and confidence in the courts. A very small percentage (5%) of people responded with high confidence in all 3, and the confidence in elections results were almost exactly 50/50: 51% confident, and 49% possessing little-to-no confidence. This model confirms two hypothesis. First, people are skeptical of their national political institutions across the world, and of the UN, which is purported to be the ultimate champions of international peace and freedom. Second, people tend to hold similar viewpoints towards each of these three political groups. Despite the fact that the courts and elections are highly variable from country to country, and involvement and support from the UN also varries accordingly, people tend to hold the three groups in similar regard.
 
 ## Recommendations
-- Next steps for our final week of class // final report
-- Ideas for future analysis beyond the scope of ALY 6040
+- Next, we plan to integrate feedback from Professor Umesh to our final report and presentation
+- We will be selecting aspects of our analysis to include in a PowerPoint presentation for classmates next Wednesday, which will require zeroing in on a select few analyses that are visually-focused, namely graphs and decision tress
+- Future analysis would touch on those issues that we were not able to cover. These included the relationship between education completed (Q275) and the importance of leisure time (Q3); the relationship between income (Q288), happiness (Q46), and health (Q47); and the relationship between marital status (Q273) and political engagement (Q209 - Q222).
