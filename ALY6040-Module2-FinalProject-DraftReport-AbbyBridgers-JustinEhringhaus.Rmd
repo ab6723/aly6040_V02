@@ -7,7 +7,6 @@ output:
     toc: true
     toc_depth: 5
   # github_document: default
-  #  toc: true
 bibliography: "references.bib"
 nocite: '@*'
 ---
@@ -39,32 +38,23 @@ p_load(caret)
 
 ##### Overview
 
-The World Values Survey (WVS) aims to understand the values, beliefs, and norms of people all over the world, comparatively and longitudinally. Operating in more than 120 countries and conducted every five years, the WVS uses a common questionnaire and household interview format to investigate human beliefs. The data is made available in waves, where the most recent Wave 7 represents interviews conducted between 2017-2022. Time series data including all waves pooled between 1981-2022 is also available.
+The World Values Survey (WVS) aims to understand the values, beliefs, and norms of people all over the world, comparatively and longitudinally. Operating in more than 120 countries and conducted every five years, the WVS uses a common questionnaire and a household interview format to investigate human beliefs. The data is made available in waves. Time series data including all waves pooled between 1981-2022 is also available.
 
-While examining the pooled dataset would certainly be interesting to answer questions about the changes worldwide in people’s values, beliefs, and norms, we are opting to limit the scope of our project to recent years (Wave 7: 2017-2022). Already, the size and scope of this dataset represents a big step for our group’s budding data analysts, as we have never yet worked with anything so faceted. The Wave 7 dataset is wide, containing 552 variables and 87,822 rows.  We reduced the number of attributes by about 90%. More details follow.
+While examining the pooled dataset would certainly be interesting to answer questions about changes in worldwide values, beliefs, and norms, we are opting to limit the scope of our project to recent years (Wave 7: 2017-2022). Already, the size and scope of this dataset represents a big step for our group's budding data analysts, as we have never yet worked with anything so large and so faceted. The Wave 7 dataset contains 552 variables and 87,822 rows. We have reduced the number of attributes by about 90%. More details to follow.
 
-Our team (Abby Bridgers and Justin Ehringhaus) are interested in how universal certain values are as well as how values differentiate across the globe. Abby is hoping to learn specifically about values on immigration, and Justin is hoping to learn specifically about social views and ethical values. 
+##### Methods and Business Questions
+
+Specifically, our team (Abby Bridgers and Justin Ehringhaus) is interested in views on religion, immigration, ethics, and how values on these topics differ across the globe. We analyze particular subsets of the dataset using exploratory and predictive techniques suited to the size, scope, and types of data under consideration. For example, we chose to incorporate geospatial visualization techniques as our dataset relates to the world, and we chose to orient our predictive modeling around decision trees because of our restriction to ordinal (Likert) data. Our analyses are inspired by the four business questions listed below:
+
+CHECK THIS, ORDERING / TITLES  
+- #1: Predicting the religious affiliation of an individual given their social views and ethical values.
+- #2: Predicting the happiness of an individual given demographic information.
+- #3: Predicting the immigration views, social views, and ethical values of an individual.
+- #4: The relationship between confidence in the United Nations (Q83), elections (Q76), and the courts (Q70)
 
 ##### Missing data? Duplicates? Cleanliness? Outliers?
 
 While there was missing data found in our dataset, we elected to refrain from cleaning the data because doing so may unintentionally falsify the results of the WVS survey. In a typical data cleaning process, outliers are removed to concentrate on the central tendency of the data. Missing data is removed and/or standardized for numerical analysis. Since our data is ordinal, and we are interested in including and analyzing the data holistically, we did not feel that it would be appropriate to "clean" the data beyond changing column names, selecting attributes of interest, and ensuring that there was not a prohibitory amount of NA values found in our subsets of interest.
-
-##### Methods
-
-We analyze particular subsets of the dataset using decision tree analysis. We chose decision tree because of our restriction to ordinal (Likert) data; we have a select few attributes of numerical data, but they're primarily demographic information as opposed to data on values, which is our point of interest. Therefore, we decided to orient our analysis around a deep-dive on decision trees. We completed four decision trees inspired by the four business questions listed below, which drawn from our exploratory data analysis insights and interests. 
-
-##### Business questions
-
-- #2: Predicting the religious affiliation of an individual given their social views and ethical values.
-- #3: Predicting the happiness of an individual given demographic information.
-- #4: Predicting the immigration views, social views, and ethical values of an individual.
-- #5: The relationship between confidence in the United Nations (Q83), elections (Q76), and the courts (Q70)
-- The relationship between income (Q288), happiness (Q46), and health (Q47).
-- The relationship between marital status (Q273) and political engagement (Q209 - Q222).
-- The relationship between religious denomination (Q289) and number of children (Q274).
-- The differences in ethical values (Q177-Q195) by ethnic group (Q290).
-- The relationship between immigration stance (122:130) and age (262).
-- The relationship between education completed (Q275) and the importance of leisure time (Q3).
 
 ---
 
@@ -128,7 +118,7 @@ wvs_subset <-
     importance.leisure.time = Q3,
     importance.work = Q5,
     # --------------------------- IMMIGRATION ---------------------------
-    job.scarc.prioritizes.nonimm = Q34,
+    imm.threatens.jobs.when.scarce = Q34,
     imm.fills.useful.jobs = Q122,
     imm.strengthens.cultural.div = Q123,
     imm.increases.crime.rate = Q124,
@@ -145,6 +135,8 @@ wvs_subset <-
 
 ## Exploratory Data Analysis
 
+**Skimming the data**:
+
 ```{r}
 myskim <- skim(wvs_subset)
 myskim
@@ -154,7 +146,9 @@ The subset of the dataset contains `r nrow(wvs_subset)` rows and `r ncol(wvs_sub
 
 Most variables are numeric; only `Country` is classified as a character vector. `Longitude` and `Latitude` are missing the most data with a completion rate of `r myskim$complete_rate[2]`, but overall the mean completion rate is `r mean(myskim$complete_rate)`, which signifies that missing data is not too much of an issue for the particular variables under consideration.
 
-As many of the variables are Likert scales (ordinal), the descriptive statistics generated by the skim give an indication of the distribution and the characteristics of the data. However, certain variables such as `Ethnic.Group`, `Country.and.year`, `Longitude`, and `Latitude` contain nominal, numeric data, and thus the descriptive statistics generated should be ignored.
+As many of the variables are ordinal (Likert scales), the descriptive statistics generated by the skim give an accurate picture of their distribution and the characteristics. However, certain variables such as `Ethnic.Group`, `Country.and.year`, `Longitude`, and `Latitude` contain nominal, numeric data, and thus the descriptive statistics for these variables can be ignored as it is meaningless.
+
+**Correlations in the data**:
 
 ```{r}
 # ordinal, numeric data only 
@@ -167,54 +161,193 @@ wvs_subset_ordinal <-
          -Country.and.year,
          -Religion)
 
+# further subsetting to topics of highest interest
+wvs_subset_correlations <- 
+  wvs_subset_ordinal %>% 
+  select(
+    # --------------------------- DEMOGRAPHICS
+    Settlement.type,
+    Town.size,
+    Age,
+    Income.Group,
+    Immigrant,
+    Marital.Status,
+    Education,
+    Number.Children,
+    Happiness,
+    Health,
+    # ------------------- ETHICAL VALUES / SOCIAL VIEWS -------------------
+    terrorism,
+    death.penalty,
+    suicide,
+    beating.wife,
+    beating.children,
+    homosexuality,
+    prostitution,
+    abortion,
+    divorce,
+    casual.sex,
+    sex.before.marriage,
+    # --------------------------- IMMIGRATION ---------------------------
+    imm.threatens.jobs.when.scarce,
+    imm.fills.useful.jobs,
+    imm.strengthens.cultural.div,
+    imm.increases.crime.rate,
+    imm.gives.political.asylum,
+    imm.increases.terrorism.risk,
+    imm.helps.poor,
+    imm.increases.unemployment,
+    imm.brings.social.conflict,
+    imm.policy.preference,
+  )
+
 # assessing correlations between ordinal, numeric data
+# only including our areas of focus: demographics, religion, ethics, immigration
 # only including data where pairwise observations are complete (i.e., not including missing data)
-cor <- cor(wvs_subset_ordinal, use = "pairwise.complete.obs")
+cor <- cor(wvs_subset_correlations, use = "pairwise.complete.obs")
 corrplot(cor, 
          method = "circle", 
          insig = "blank", 
          diag = FALSE,
          tl.cex = 0.5) %>% 
     corrRect(name = c('Settlement.type', 
-                      'votes.locally', 
-                      'cheating.taxes', 
                       'terrorism', 
-                      'homosexuality',
-                      'importance.leisure.time',
-                      'job.scarc.prioritizes.nonimm',
+                      'imm.threatens.jobs.when.scarce',
                       'imm.policy.preference'))
 ```
 
-The visualization of a correlation matrix above indicates the extent to which each variable, compared to one another, correlates or relates. Darker blue colors represent stronger positive correlations, and darker orange colors represent stronger negative correlations. For visualization purposes, we have bucketed the variables into four groups, albeit it must be noted that by doing so we risk imposing structure where it does not, or should not, exist: 
+The visualization of a correlation matrix above indicates the extent to which each variable, compared to one another, correlates or relates. Darker blue colors represent stronger positive correlations, and darker orange colors represent stronger negative correlations. For visualization purposes, we have bucketed the variables into four groups, but it should be noted that by doing so we risk imposing structure where it does not, or should not, exist: 
 
 - The first bucket contains variables relating to demographics
-- The second relates to political participation / confidence in government
-- The third relates to the relationship between government and citizens
-- The fourth relates to ethical values
-- The fifth relates to social views
-- The sixth relates to career values
-- The seventh relates to immigration
+- The second bucket relates to ethical values / social views
+- The third bucket relates to immigration / beliefs about immigrant populations
 
-There are endless conversations that could be held based off this visualization of a correlation matrix. Some key insights are as follows:
+Although this visualization of a correlation matrix reveals many interesting insights into how our variables correlate, the following are just a couple of key insights relating to the focus of our project — religion, immigration, and ethics:
 
-- All variables in the fifth bucket (social views) are strongly correlated. This makes sense, as those with similar social views are generally split along the lines of liberal versus conservative thought. For example, it makes sense that those who hold conservative views on sexuality also hold conservative views on marriage, career, and government.
-- Education is positively correlated with liberal social views (i.e., higher education = more liberal social views).
-- Number of children is negatively correlated with liberal social views (i.e., more children = more conservative social views).
-- Education is negatively correlated with number of children (i.e., higher education = less children).
-- Voting locally or nationally is negatively correlated with age (i.e., older people participate more in politics).
-- Views on terrorism positively correlate with views on domestic abuse (i.e., those who view terrorism favorably also view domestic abuse favorably).
-- There is a moderate correlation between two questions on immigration. In the immigration questions, respondents were asked to answered their degree of agreement with statements. The moderately positively correlated statements are "Immigration in my country increases crime rate" and "immigration in my country brings social conflict." These questions are answered on the same ordinal scale of 3 options: "disagree", "hard to say", and "agree". 
-- There is a strong negative correlation between settlement type and town size which are both on a 5-point scale. A response of "1" to the town size question means the respondent lives in a town of under 5,000 people. A response of "1" to the settlement type question means the respondent lives in the capital city of their country. Therefore, there is a strong inverse relationship between these two attributes.
+- Some correlations occur between variables in the first bucket. For example, `Settlement.type` and `Town size` are strongly correlated; rural areas have few residents, urban areas have many. Similarly, `Marital Status` correlates with `Age` and `Number.Children`; `Income.Group` correlates with `Education`; `Happiness` correlates with `Health`. These are all to be expected.
+- Many correlations occur between variables in the second bucket. Likely, this is an indication of liberal versus conservative thought. For example, those who hold liberal/conservative views on `homosexuality` are also likely to hold respectively liberal/conservative views on `abortion`.
+- Some correlations occur between variables in the third bucket.For example, those who feel immigration does (or does not) increase crime rates also feel immigration does (or does not) increase social conflict.
 
-Having understood how different variables correlate, we can transition to applying data mining techniques to answering our business questions.
+Our correlation matrix has confirmed that we humans are not blind in our values and beliefs. We seek order and consistency. If we feel one way about one thing, we will likely feel similarly about another, related thing. That said, we are complex, and thus the correlation matrix shows a degree of inconsistency, too. 
+
+Having understood what correlates with what, the next step in our exploratory data analysis will be to explore where clusters form. Using geospatial visualization techniques, we will assess how views on religion, immigration, ethics are spread across the globe.
+
+**Visualizing the data**:
+
+```{r}
+# Creates colored points (gradient) based on particular categorical numeric values in dataframe.
+# For display in a map (see examples below)
+map_color_range <- function(tibl, col, 
+                            min_color = "green", max_color = "red",
+                            shape = 1, size = 0.4) {
+  min_value <- min(col, na.rm = TRUE)
+  max_value <- max(col, na.rm = TRUE)
+  # vector of color gradients with a length of `max_value`
+  colors <- colorRampPalette(c(min_color, max_color))(max_value)
+  # executes points() for each value between min and max
+  for (i in min_value:max_value) {
+    tibl_subset_col <- 
+      tibl %>% 
+      filter(col == i) 
+    points(tibl_subset_col$Longitude, 
+           tibl_subset_col$Latitude, 
+           col = alpha(colors[i], 0.1), # colors from color ramp above w/ transparency
+           pch = shape, 
+           cex = size)
+  }
+}
+
+map("world")
+title(main = "Homosexuality is justifiable (green) vs. never justifiable (red)")
+map_color_range(wvs_subset, wvs_subset$homosexuality, 
+                min_color = "red", max_color = "green")
+```
+
+Geospatial data can reveal many interesting trends. For example, we can visualize beliefs on `homosexuality`, where greener colors represent those who believe homosexuality is "always justifiable" and redder colors represent those who believe homosexuality is "never justifiable." Eastern Europe and parts of Africa appear most opposed to homosexuality, whereas North America appear most tolerant.
+
+```{r}
+map("world")
+title(main = "Immigration does (green) or does not (red) increase cultural diversity")
+map_color_range(wvs_subset, wvs_subset$imm.strengthens.cultural.div, 
+                min_color = "red", max_color = "green")
+
+map("world")
+title(main = "Immigration does (red) or does not (green) increase risk of terrorism")
+map_color_range(wvs_subset, wvs_subset$imm.increases.terrorism.risk, 
+                min_color = "green", max_color = "red")
+```
+
+The two visualizations above, when compared with one another, reveal an interesting dichotomy in beliefs on immigration. On the one hand, people across the globe generally say immigration strengthens cultural diversity. On the other hand, people across the globe also generally say immigration increases the risk of terrorism.
+
+So the question arises, do people generally support or not support immigration? What this visualization tells us is that humans have conflicting beliefs. It may just be the case that we humans can hold conflicting beliefs. In the field of psychology, this is referred to as "cognitive dissonance." As a classic example, meat-eaters may believe that harming animals is a bad thing, and yet the act of eating meat contributes to the suffering of animals. Our team feels that beliefs on immigration may be similar. Humans across the globe generally like the idea of cultural diversity, and yet when it comes to living alongside people of different cultures, they may exhibit fearful or cautious behaviors that suggest otherwise.
+
+The human experience is a many-faceted. Now that we have explored what correlates with what, and where clusters form, our next step will be to apply decision trees as a predictive modeling technique to understand more precisely what variables are most indicative of certain values.
 
 ---
 
-## Data Mining Techniques and Interpretations
+## Predictive Modeling Techniques and Interpretations
 
-... explain reason for choosing decision tree / what business question(s) we hope to answer using this approach ...
+In each of our decision trees, 80% of the data will randomly be placed into a training set and 20% into a test set. The training sets will be used to create the decision trees, and the test sets will be used to test the resulting model's accuracy. The `rpart` function will build a model separating the outcome variable into distinct groups, and the model will determine which variables are deemed most important for classifying the outcome variable. Node 1 will always serve as the best classifier for splitting the data into two groups, and the following nodes serve as the next best classifiers for splitting the data into groups. This process repeats recursively until no further splitting is possible or necessary at which point a decision has been reached.
 
-In the tolerance tree, we sought to explore attitudes towards immigration in relation to a key value: tolerance. By setting up a decision tree with two questions on immigration that are in some ways in conflict with one another, we sought to answer the question, "how do those who believe tolerance is an important teaching for children feel about immigrants in their immediate lives, and more broadly, as a threat to security?" The two variables employed to answer this question are to the effect of, "does immigration increase the risk of terrorism?" and "would you like to have immigrants as neighbors?"
+The major question to ask of a decision tree is whether the model is too complex, too specific, or too sensitive. In other words, did the recursive process of splitting the data into groups and subgroups continue on for too long. When should the splitting stop? For each of our business questions, we will apply the decision tree to our test data and then to our train data to assess and explain the model's accuracy.
+
+### Business Question #1: Classifying Immigrants versus Nonimmigrants
+
+In this first decision tree, we seek to understand what variables are most indicative of whether or not someone is an immigrant. A human posed with this same question might list a number of factors such as education, income, or number of children, but these would be biased. A decision tree, on the other hand, will assess all relationships between all variables in the dataset to produce a simple rule-based model.
+
+```{r}
+immigrant_tree <- 
+  wvs_subset %>% 
+  select(-Longitude, -Latitude, -Country.and.year, -Ethnic.Group, -Country)
+
+# partition prep
+set.seed(888)
+# remove NAs
+immigrant_tree <- na.omit(immigrant_tree)
+
+# partition
+immigrant_tree_partition <- createDataPartition(y = immigrant_tree$Immigrant, p = 0.8, list = FALSE)
+immigrant_tree_train <- na.omit(immigrant_tree[immigrant_tree_partition, ])
+immigrant_tree_test <- immigrant_tree[-immigrant_tree_partition, ]
+
+# building the classification tree with rpart
+immigrant_tree_model <- rpart(formula = Immigrant ~ .,
+                              data = immigrant_tree_train,
+                              method = "class")
+
+summary(immigrant_tree_model)
+
+# Visualize the decision tree with rpart.plot
+fancyRpartPlot(immigrant_tree_model, 
+               main = "Decision Tree #1: Nonimmigrant (1) or Immigrant (2)\n-- a question of political participation, immigration beliefs, and age --",
+               caption = "",
+               type = 5)
+```
+
+The decision tree boiled all variables down to just several splits. The path to being classified as an "Immigrant" (2) can be read as follows:
+
+- Do you rarely vote locally, or are you not allowed to vote locally? If so, you may be an immigrant.
+- Do you disagree strongly that immigration threatens jobs? If so, you may be an immigrant.
+- Are you 24 years or older? If so, you may be an immigrant.
+- Do you rarely vote nationally, or are you not allowed to vote nationally? If so, you are an immigrant.
+- If the answer is no to any of the above questions, you are not an immigrant.
+
+What is interesting about these variables is that the first and last relate to political participation, the second relates to a belief about immigration, and the third relates to a demographic. Thus, the model has incorporated a variety of decisions to be made in its determinations, and we can next test for its accuracy using the test set.
+
+```{r}
+#Testing the model
+pred_immigrant_tree_model <- predict(object = immigrant_tree_model, immigrant_tree[-5], type = "class")
+immigrant_tree_model_matrix <- table(immigrant_tree$Immigrant, pred_immigrant_tree_model)
+confusionMatrix(immigrant_tree_model_matrix)
+```
+
+... continue here ...
+
+
+
+
+
+We seek to understand attitudes towards immigration in relation to a key value: tolerance. By setting up a decision tree with two questions on immigration that are in some ways in conflict with one another, we sought to answer the question, "how do those who believe tolerance is an important teaching for children feel about immigrants in their immediate lives, and more broadly, as a threat to security?" The two variables employed to answer this question are to the effect of, "does immigration increase the risk of terrorism?" and "would you like to have immigrants as neighbors?"
 
 #### Business Question #4: Predicting the immigration views, social views, and ethical values of an individual. 
 The following decision tree predicts the importance of teaching children tolerance based on 2 immigration viewpoints: friendliness towards immigrants as neighbors, and whether immigration increases the risk of terrorism. Decision tree was chosen as the mode of analysis because it provides a thorough answer to the question of whether those who emphasize tolerance to their children display tolerance towards immigrants in their home country.
@@ -355,53 +488,6 @@ fancyRpartPlot(religion_tree_model,
 pred_religion_tree_model <- predict(object = religion_tree_model, religion_tree[-6], type = "class")
 religion_tree_model_matrix <- table(religion_tree$Religion, pred_religion_tree_model)
 confusionMatrix(religion_tree_model_matrix)
-```
-
-... talk about accuracy ...
-
-### Business Question #3: Predicting whether an immigrant or nonimmigrant
-
-... talk about reason for choosing decision tree for this particular question ...
-
-```{r}
-immigrant_tree <- 
-  wvs_subset %>% 
-  select(-Longitude, -Latitude, -Country.and.year, -Ethnic.Group, -Country)
-
-# partition prep
-set.seed(888)
-# remove NAs
-immigrant_tree <- na.omit(immigrant_tree)
-
-# partition
-immigrant_tree_partition <- createDataPartition(y = immigrant_tree$Immigrant, p = 0.8, list = FALSE)
-immigrant_tree_train <- na.omit(immigrant_tree[immigrant_tree_partition, ])
-immigrant_tree_test <- immigrant_tree[-immigrant_tree_partition, ]
-
-# building the classification tree with rpart
-immigrant_tree_model <- rpart(formula = Immigrant ~ .,
-                              data = immigrant_tree_train,
-                              method = "class")
-
-summary(immigrant_tree_model)
-
-# Visualize the decision tree with rpart.plot
-fancyRpartPlot(immigrant_tree_model, 
-               main = "Predicting Immigrant Status\n-- a question of political participation, immigration beliefs, and age --",
-               caption = "",
-               type = 5)
-```
-
-`votes.locally` = 1 (always) to 4 (not allowed)
-`job.scarc.prioritizes.nonimm` = 1 (agree strongly) to 5 (disagree strongly)
-`Age` = ...
-`votes.nationally` = 1 (always) to 4 (not allowed)"
-
-```{r}
-#Testing the model
-pred_immigrant_tree_model <- predict(object = immigrant_tree_model, immigrant_tree[-5], type = "class")
-immigrant_tree_model_matrix <- table(immigrant_tree$Immigrant, pred_immigrant_tree_model)
-confusionMatrix(immigrant_tree_model_matrix)
 ```
 
 ... talk about accuracy ...
