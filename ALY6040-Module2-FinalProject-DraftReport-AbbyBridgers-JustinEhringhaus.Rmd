@@ -44,13 +44,12 @@ While examining the pooled dataset would certainly be interesting to answer ques
 
 ##### Methods and Business Questions
 
-Specifically, our team (Abby Bridgers and Justin Ehringhaus) is interested in views on religion, immigration, ethics, and how values on these topics differ across the globe. We analyze particular subsets of the dataset using exploratory and predictive techniques suited to the size, scope, and types of data under consideration. For example, we chose to incorporate geospatial visualization techniques as our dataset relates to the world, and we chose to orient our predictive modeling around decision trees because of our restriction to ordinal (Likert) data. Our analyses are inspired by the four business questions listed below:
+Specifically, our team (Abby Bridgers and Justin Ehringhaus) is interested in views on religion, immigration, ethics, governmental organizations, and how values on these topics differ across the globe. We analyze particular subsets of the dataset using exploratory and predictive techniques suited to the size, scope, and types of data under consideration. For example, we chose to incorporate geospatial visualization techniques as our dataset relates to the world, and we chose to orient our predictive modeling around decision trees because of our restriction to ordinal (Likert) data. Our analyses are inspired by the four business questions listed below:
 
-CHECK THIS, ORDERING / TITLES  
-- #1: Predicting the religious affiliation of an individual given their social views and ethical values.
-- #2: Predicting the happiness of an individual given demographic information.
-- #3: Predicting the immigration views, social views, and ethical values of an individual.
-- #4: The relationship between confidence in the United Nations, elections, and the courts.
+- #1: Predicting whether or not an individual is an immigrant
+- #2: Predicting whether an individual views teaching tolerance as important based on their beliefs regarding immigration 
+- #3: Predicting the religious denomination of an individual
+- #4: Predicting an individual's confidence in elections
 
 ##### Missing data? Duplicates? Cleanliness? Outliers?
 
@@ -319,8 +318,8 @@ summary(immigrant_tree_model)
 
 # Visualize the decision tree with rpart.plot
 fancyRpartPlot(immigrant_tree_model, 
-               main = "Decision Tree #1: Nonimmigrant (1) or Immigrant (2)\n-- a question of political participation, immigration beliefs, and age --",
-               caption = "",
+               main = "Decision Tree #1: Nonimmigrant or Immigrant\n-- a question of political participation, immigration beliefs, and age --",
+               caption = "Nonimmigrant = 1, Immigrant = 2",
                type = 5)
 ```
 
@@ -332,25 +331,22 @@ The decision tree boiled all variables down to just several splits. The path to 
 - Do you rarely vote nationally, or are you not allowed to vote nationally? If so, you are an immigrant.
 - If the answer is no to any of the above questions, you are not an immigrant.
 
-What is interesting about these variables is that the first and last relate to political participation, the second relates to a belief about immigration, and the third relates to a demographic. Thus, the model has incorporated a variety of decisions to be made in its determinations, and we can next test for its accuracy using the test set.
+What is interesting about these variables is that the first and last relate to political participation, the second relates to a belief about immigration, and the third relates to a demographic. The model has incorporated a convincing spread of variables to come up with its rule-based output. We can next test for the accuracy of the model using the test set.
 
 ```{r}
 #Testing the model
-pred_immigrant_tree_model <- predict(object = immigrant_tree_model, immigrant_tree[-5], type = "class")
-immigrant_tree_model_matrix <- table(immigrant_tree$Immigrant, pred_immigrant_tree_model)
+pred_immigrant_tree_model <- predict(object = immigrant_tree_model, immigrant_tree_test[-5], type = "class")
+immigrant_tree_model_matrix <- table(immigrant_tree_test$Immigrant, pred_immigrant_tree_model)
 confusionMatrix(immigrant_tree_model_matrix)
 ```
 
-... continue here ...
+This model is highly accurate (94.77%)! This shows that the model does a good job on unseen data. 
 
+### Business Question #2: Predicting whether an individual views teaching tolerance as important based on their beliefs regarding immigration 
 
+In this second decision tree, we seek to understand attitudes towards immigration in relation to a key value: tolerance. By setting up a decision tree with two questions on immigration that are in some ways in conflict with one another, we sought to answer the question, "how do those who believe tolerance is an important teaching for children feel about immigrants in their immediate lives, and more broadly, as a threat to security?" The two variables employed to answer this question are to the effect of, "does immigration increase the risk of terrorism?" and "would you like to have immigrants as neighbors?"
 
-
-
-We seek to understand attitudes towards immigration in relation to a key value: tolerance. By setting up a decision tree with two questions on immigration that are in some ways in conflict with one another, we sought to answer the question, "how do those who believe tolerance is an important teaching for children feel about immigrants in their immediate lives, and more broadly, as a threat to security?" The two variables employed to answer this question are to the effect of, "does immigration increase the risk of terrorism?" and "would you like to have immigrants as neighbors?"
-
-#### Business Question #4: Predicting the immigration views, social views, and ethical values of an individual. 
-The following decision tree predicts the importance of teaching children tolerance based on 2 immigration viewpoints: friendliness towards immigrants as neighbors, and whether immigration increases the risk of terrorism. Decision tree was chosen as the mode of analysis because it provides a thorough answer to the question of whether those who emphasize tolerance to their children display tolerance towards immigrants in their home country.
+The following decision tree predicts the importance of teaching children tolerance based on two viewpoints on immigration: friendliness towards immigrants as neighbors and whether immigration increases the risk of terrorism. A decision tree was chosen as the mode of analysis because it provides a thorough answer to the question of whether those who emphasize tolerance to their children display tolerance towards immigrants in their home country.
 
 ```{r}
 # sub-setting data
@@ -394,7 +390,7 @@ summary(tolerance_tree)
 # tree visualization
 library(rattle)
 library(rpart.plot)
-fancyRpartPlot(tolerance_tree, caption = "Predicting Importance of Teaching Children Tolerance Based on Immigration Viewpoints")
+fancyRpartPlot(tolerance_tree, main = "Decision Tree #2: Importance of Teaching Tolerance,\nBased on Beliefs about Immigration", caption = "Tolerance is Important (1) versus Nonimportant (2)", type = 5)
 # Immigrants as neighbors: 1 = wouldn't like  2 = didn't mention
                            #0.2199076           0.7800924
 # Tolerance important for children: 1 = yes   2 = didn't mention 
@@ -415,22 +411,25 @@ library(caret)
 table(tree_pred, test$Tolerance.Important.For.Children)
 confusionMatrix(as.factor(tree_pred), as.factor(test$Tolerance.Important.For.Children))
 ```
-#### Findings
+
+**Findings**:
+
 It may be assumed that immigration viewpoints would be a strong predictor of importance of teaching children tolerance. If people view immigrants as an important aspect of their home home country culture and communities, we would likely describe them as tolerant, among other things. Therefore, analyzing the results of the decision tree with one positive question about immigration and one negative, it's interesting to see the results on the leaves, which all land close the 50/50 line, with tolerance being important teaching for children holding the majority in each leaf. The decision tree is 63% accurate. Decision trees tend to over fit accuracy without extensive preparation to the training and test partitions.
 
-#### Tolerance Importance: Leaf Interpretation (L-R)
-* The vast majority of respondents - *78%* - are neutral of positive about the prospect of having neighbors that have immigrated from other countries.
-* Of these 78%, 34% of respondents are neutral or positive about immigrants as neighbors, and responded that immigration increases the risk of terrorism. I'll classify this group as somewhat supportive of immigration (open to immigration in their immediate community and wary of immigration in their country). Within this leaf, 65% believe in the importance of teaching children tolerance (the highest among the leaves).
-* 27% are neutral or positive about immigrants as neighbors, and disagree that immigration increases the risk of terrorism. I'll classify this group as most open to immigration. Within this leaf, 64% believe in the importance of teaching tolerance to children.
-* 18% are neutral or positive about immigrants as neighbors, and unsure about the risk they pose to terrorism. This group is neutral. 
-* Within the much smaller cohort that responded that they wouldn't like having immigrants as neighbors - *22%* - 10% are neutral or disagree with the question of whether immigiration increases the risk of terrorism. I'll include this group in the somewhat supportive of immigration category. This group also believes in teaching tolerance to children, though by a slim margin of about 6%. 
-* In contrast, 12% of respondents agree that immgiration increases the risk of terrorism, and responded negatively to the idea of being neighbors with immigrants. This group is classified as the most unfavorable to immigration. Still, 59% of this group believes in teaching tolerance to children.
+**Tolerance Importance: Leaf Interpretation (L-R)**:
 
-#### Based on this classification system, respondents fall into the following categories regarding immigration viewpoints: 27% are very supportive, 44% are somewhat supportive, 18% are neutral or unsure, and 12% are not supportive. The question of whether those who emphasize tolerance to their children display tolerance towards immigrants in their home country is answered; every category classified by immigration viewpoints, including those with negative attitudes, responded that they believe in teaching tolerance to children.
+- The vast majority of respondents - *78%* - are neutral of positive about the prospect of having neighbors that have immigrated from other countries.
+- Of these 78%, 34% of respondents are neutral or positive about immigrants as neighbors, and responded that immigration increases the risk of terrorism. I'll classify this group as somewhat supportive of immigration (open to immigration in their immediate community and wary of immigration in their country). Within this leaf, 65% believe in the importance of teaching children tolerance (the highest among the leaves).
+- 27% are neutral or positive about immigrants as neighbors, and disagree that immigration increases the risk of terrorism. I'll classify this group as most open to immigration. Within this leaf, 64% believe in the importance of teaching tolerance to children.
+- 18% are neutral or positive about immigrants as neighbors, and unsure about the risk they pose to terrorism. This group is neutral. 
+- Within the much smaller cohort that responded that they wouldn't like having immigrants as neighbors - *22%* - 10% are neutral or disagree with the question of whether immigiration increases the risk of terrorism. I'll include this group in the somewhat supportive of immigration category. This group also believes in teaching tolerance to children, though by a slim margin of about 6%. 
+- In contrast, 12% of respondents agree that immgiration increases the risk of terrorism, and responded negatively to the idea of being neighbors with immigrants. This group is classified as the most unfavorable to immigration. Still, 59% of this group believes in teaching tolerance to children.
 
-### Business Question #2: Predicting the religious affiliation of an individual given social views and ethical values.
+Based on this classification system, respondents fall into the following categories regarding immigration viewpoints: 27% are very supportive, 44% are somewhat supportive, 18% are neutral or unsure, and 12% are not supportive. The question of whether those who emphasize tolerance to their children display tolerance towards immigrants in their home country is answered; every category classified by immigration viewpoints, including those with negative attitudes, responded that they believe in teaching tolerance to children.
 
-... talk about reason for choosing decision tree for this particular question ...
+### Business Question #3: Classifying Religious Denominations
+
+In this third decision tree, we seek to understand what variables are most indicative of religious denomination. A human may observe the foods someone eats or the rituals someone practices to determine this, but it will be interested to feed variables in our dataset to a decision tree to understand which factors are found to be most important in this classification task.
 
 ```{r}
 religion_tree <-
@@ -457,42 +456,47 @@ summary(religion_tree_model)
 # Visualize the decision tree with rpart.plot
 rpart.plot(religion_tree_model, nn = TRUE)
 fancyRpartPlot(religion_tree_model, 
-               main = "Predicting Religious Denomination\n-- a question of social views and town size --",
-               caption = "0 = None\n1 = Roman Catholic\n5 = Muslim",
+               main = "Decision Tree #3: Religious Denomination\n-- a question social views, ethical values, and town size --",
+               caption = "0 = No religion, 1 = Roman Catholic, 5 = Muslim",
                type = 5)
 ```
 
-`sex.before.marriage` = 
-`Town.size` = 
-`homosexuality` = 
+The decision tree boiled all variables down to just several splits. It even chose to take many of the possible religions out of the question, likely because there were too few of each to include. The path to being classified as "Roman Catholic" (1) can be read as follows:
 
-# Religions:
-# 0 = Do not belong to a denomination
-# 1 = Roman Catholic
-# 5 = Muslim
-# Unused: Protestant, Orthodox (Russian/Greek/etc.), Jew, Hindu, Buddhist, Other
+- Do you believe sex before marriage is justifiable to some extent? If so, you may be Roman Catholic.
+- Do you live in a town/city with less than 20,000 residents? If so, you may be Roman Catholic.
+- Do you believe homosexuality is not justifiable to some extent? If so, you may be Roman Catholic.
 
-# Sex Before Marriage: scale from 1 (never justifiable) to 10 (always justifiable)
-# Homosexuality: scale from 1 (never justifiable) to 10 (always justifiable)
+Here, the first and last variable considered by the model relates to social views / ethical values, while the second variable relates to a demographic. Again, the model has incorporated just what it thinks to be of utmost importance to come up with its rule-based output. Other interpretations we can make based on this model are:
 
-# Interpretation:
-# 62% of those who think sex before marriage is slightly justifiable do not have a religion
-# 38% of those who think sex before marriage is never justifiable have a religion
-# Of those having a religion, the line is split along views on homosexuality:
-#     - 4% of those who think homosexuality is justifiable are Roman Catholics
-#     - 34% of those who think homosexuality is not justifiable are Muslim
+- 63% of those in the training set who think sex before marriage is justifiable to some extent either do not have a religion or are Roman Catholic, the rest are Muslim.
+- The classification of Muslims does not include their town size or views on homosexuality. The model would say that beliefs on sex before marriage, alone, is enough to classify whether or not someone is Muslim.
+
+Already, this model seems slightly problematic. There may be people who are not Muslim who similarly believe sex before marriage is never justifiable, but the model at present would classify all people who share this belief as Muslim. As a next step, we can test the accuracy of the model by feeding it the test set.
 
 ```{r}
 #Testing the model
-pred_religion_tree_model <- predict(object = religion_tree_model, religion_tree[-6], type = "class")
-religion_tree_model_matrix <- table(religion_tree$Religion, pred_religion_tree_model)
+pred_religion_tree_model <- predict(object = religion_tree_model, religion_tree_test[-6], type = "class")
+religion_tree_model_matrix <- table(religion_tree_test$Religion, pred_religion_tree_model)
 confusionMatrix(religion_tree_model_matrix)
 ```
 
-... talk about accuracy ...
+This model is highly inaccurate (38.45%)! This shows that the model does a poor job on unseen data. A possible reason for this is the skewness in the distributions of data on different religious denominations. A recommended next step would be to employ random sampling techniques on the dataset to normalize the distributions of each religious denomination prior to creating training and test splits.
 
-## Business Question #5: The relationship between confidence in the United Nations (Q83), elections (Q76), and the courts (Q70).
-The following decision tree answers the question of whether those who have faith in elections also have faith in the courts, and the United Nations (UN). Elections operate as the bedrock of democracy, but in countries without democracy, elections are often futile systems (or at least perceived to be). Therefore, it's worthwhile and interesting to assess the relationship, if any, between confidence in these 3 organizations. A decision tree was chosen for this reason, and because these questions were answered on the same Likert scale, making for a clearer classification from the algorithm.
+### Business Question #4: Predicting Confidence in Elections
+
+In this fourth and final decision tree, we seek to answer the question of whether those who have faith in elections also have faith in the courts and the United Nations (UN). Elections operate as the bedrock of democracy, but in countries without democracy, elections are often futile systems (or at least perceived to be). 
+
+Taking a quick step back to exploratory visualizations, it would be interesting to see, globally, how confident people are about their countrys' elections.
+
+```{r}
+map("world")
+title(main = "Confident (green) vs. not confident (red) in election process")
+map_color_range(wvs_subset, wvs_subset$confidence.elections, 
+                min_color = "green", max_color = "red")
+```
+
+It appears overall we humans do not trust elections! Therefore, it's worthwhile and interesting to assess the relationship, if any, between confidence in elections, courts, and the UN. A decision tree was chosen for this reason, and because these questions were answered on the same Likert scale, making for a clearer classification from the algorithm.
 
 ```{r}
 tree_four <- 
@@ -518,26 +522,27 @@ four_model <- rpart(formula = confidence.elections ~ .,
 summary(four_model)
 
 # Visualize the decision tree with rpart.plot
-# rpart.plot(four_model, nn = TRUE)
 fancyRpartPlot(four_model, 
-               main = "Predicting Confidence in Elections",
+               main = "Decision Tree #4: Predicting Confidence in Elections",
                caption = "Confidence Level: 1 = A great deal, 2 = Quite a lot, 3 = Not very much, 4 = Not a lot",
-               type = 4)
+               type = 5)
 ```
 
-* The response scale is the same among each of the variables included in this decision tree. Confidence in courts and confidence in the United Nations (UN) are used to predict confidence in elections. 
+- The response scale is the same among each of the variables included in this decision tree. Confidence in courts and confidence in the United Nations (UN) are used to predict confidence in elections. 
 
-## Confidence in Elections: Leaf Interpretation (L-R)
-* High and low confidence in the courts is split almost 50/50, with 51% of respondents reporting at least quite a bit of confidence in the court, and 49% of respondents reporting less than or equal to not very much confidence in the court system. 
-* 5% of respondents have a great deal of confidence in the UN, courts, and elections. This means that only 1 in 20 people have a lot of confidence in all 3 bodies in their country.
-* 9% of respondents have a great deal of confidence in courts, and quite a lot of confidence in the UN and elections.
-* 37% of respondents have quite a lot of confidence in courts and elections.
-* 32% of respondents have not very much confidence in courts, or elections.
-* 17% of respondents have not a lot of confidence in courts or elections.
+**Confidence in Elections: Leaf Interpretation (L-R)**:
 
-#### In summary, results indicate that half of respondents have little trust in public systems like the courts, elections, and the UN, while the other half have moderate-to-high levels of trust in each. A mere 5% of respondents rated all 3 institutions with the highest level of trust, validating the popular culture idea that there is widespread public skepticism concerning political systems.
+- High and low confidence in the courts is split almost 50/50, with 51% of respondents reporting at least quite a bit of confidence in the court, and 49% of respondents reporting less than or equal to not very much confidence in the court system. 
+- 5% of respondents have a great deal of confidence in the UN, courts, and elections. This means that only 1 in 20 people have a lot of confidence in all 3 bodies in their country.
+- 9% of respondents have a great deal of confidence in courts, and quite a lot of confidence in the UN and elections.
+- 37% of respondents have quite a lot of confidence in courts and elections.
+- 32% of respondents have not very much confidence in courts, or elections.
+- 17% of respondents have not a lot of confidence in courts or elections.
 
-### Testing Election Confidence Model Accuracy
+In summary, results indicate that half of respondents have little trust in public systems like the courts, elections, and the UN, while the other half have moderate-to-high levels of trust in each. A mere 5% of respondents rated all 3 institutions with the highest level of trust, validating the popular culture idea that there is widespread public skepticism concerning political systems. 
+
+Next, we will assess the model's accuracy by feeding it the test set.
+
 ```{r}
 # Variable of importance
 four_model$variable.importance # confidence in courts
@@ -553,16 +558,37 @@ table(four_pred, four_test$confidence.elections)
 confusionMatrix(as.factor(four_pred), as.factor(four_test$confidence.elections))
 ```
 
-Model accuracy is 54%. Decision trees do not consider the interdependence of variables when calculating a split, so using a random forrest instead of one decision tree results in a more accurate model. Another way to improve accuracy is k-fold cross validation. For the purposes of this business question, the model and it's accuracy suffice. 
+Model accuracy is 54%. Decision trees do not consider the interdependence of variables when calculating a split, so using a random forest instead of one decision tree results in a more accurate model. Another way to improve accuracy is k-fold cross validation. For the purposes of this business question, the model and it's accuracy suffice.
 
-## Interpretation
-- Key takeaways, connecting findings and ideas to big picture of values
+---
 
-The tolerance tree illustrates that 78% of respondents responded favorably or neutrally to having immigrants as neighbors. Within this cohort, 27% of respondents do not want immigrants as neighbors but do not think that immigrants increase the risk of terrorism. These people are hesitant about immigrants in their immediate vicinity but don't fear them on a national level. In contrast, 12% of respondents feel that immigration increases the risk of terrorism but feel neutrally or positively about have immigrants as neighbors. All in all, that's 44% of respondents that hold different, somewhat conflicting views about immigrants as neighbors and as a threat to domestic security. Investigating other values that may be driving this discrepancy in immigration attitudes would be a good use of the values dataset. 
+## Interpretations
 
-A more straightforward decision tree can be found in the political systems tree, which predicts confidence in elections using confidence in the UN and confidence in the courts. A very small percentage (5%) of people responded with high confidence in all 3, and the confidence in elections results were almost exactly 50/50: 51% confident, and 49% possessing little-to-no confidence. This model confirms two hypothesis. First, people are skeptical of their national political institutions across the world, and of the UN, which is purported to be the ultimate champions of international peace and freedom. Second, people tend to hold similar viewpoints towards each of these three political groups. Despite the fact that the courts and elections are highly variable from country to country, and involvement and support from the UN also varries accordingly, people tend to hold the three groups in similar regard.
+**Summary**:
 
-## Recommendations
-- Next, we plan to integrate feedback from Professor Umesh to our final report and presentation
-- We will be selecting aspects of our analysis to include in a PowerPoint presentation for classmates next Wednesday, which will require zeroing in on a select few analyses that are visually-focused, namely graphs and decision tress
+Our initial exploratory data analysis and subsequent findings from decision trees have begun to supply answers on each of our decision trees, which we will summarize below:
+
+- Immigration-related
+-- #1: Predicting whether or not an individual is an immigrant
+-- #2: Predicting whether an individual views teaching tolerance as important based on their beliefs regarding immigration 
+
+Our geospatial visualizations revealed that views on immigration are contradictory. People across the globe value cultural diversity and yet are simultaneously fearful of immigrants. In terms of what it means to be an immigrant, our first decision tree found that it is a combination of demographic factors, paired with political participation, paired with ethical values. Our second decision tree found that people generally value teaching tolerance in their households irrespective of their beliefs regarding immigration, which is somewhat counter-intuitive as it would be natural to think that views on tolerance and views on immigration correlate.
+
+- #3: Predicting the religious denomination of an individual
+
+Our third decision tree brought together an interesting pairing of ethical values and demographic factors as determinants of religious denomination. Although the model accuracy was low, there is likely truth in the statement that religious denomination goes hand-in-hand with ethical values. Demographic factors such as town size, too, must have an affect on religious denomination, as smaller towns may be more communal and/or their inhabitants more reliant upon one another and thus more homogeneous in terms of religious denomination, whereas larger, urban areas might be more agnostic due to their diversity.
+
+- #4: Predicting an individual's confidence in elections
+
+Our final decision tree and accompanying geospatial visualization revealed the world, overall, is not very confident in governmental organizations and structures. However, those who believe in courts are more likely to also believe in elections, and those who believe in both are more likely to believe in the UN, too. This is another example of humans exhibiting consistent identity traits, where those who identify as supporters of governmental structures or organizations are likely to consistently identify as supporters of all-things government. On the other hand, those lacking trust in governmental structures or organizations will generally lack trust across the board when it comes to such topics.
+
+**Final Thoughts**:
+
+Humans are complex. We are moderately to extremely consistent on some things (e.g., beliefs on governmental organizations, religion, ethics), but then we are moderately to extremely inconsistent on other things (e.g., immigration). We set out to explore the various facets of the human experience, and we now culminate with a deeper understanding of what makes a human a human.
+
+## Recommendations & Conclusions
+
+- Next, we plan to integrate feedback from Professor Hodeghatta to our final report and presentation.
+- We will be selecting aspects of our analysis to include in a PowerPoint presentation for classmates next Wednesday, which will require zeroing in on a select few analyses that are visually-focused, namely graphs and decision tress.
 - Future analysis would touch on those issues that we were not able to cover. These included the relationship between education completed (Q275) and the importance of leisure time (Q3); the relationship between income (Q288), happiness (Q46), and health (Q47); and the relationship between marital status (Q273) and political engagement (Q209 - Q222).
+- Future analysis would include more advanced predictive modeling techniques, starting with random forests. We cannot know what we have not yet studied, but we would hope to find other useful modeling techniques beyond decision trees that pair well with ordinal (Likert) data!
