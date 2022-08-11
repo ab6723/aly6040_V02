@@ -448,6 +448,8 @@ fancyRpartPlot(four_model,
 * 32% of respondents have not very much confidence in courts, or elections.
 * 17% of respondents have not a lot of confidence in courts or elections.
 
+#### In summary, results indicate that half of respondents have little trust in public systems like the courts, elections, and the UN, while the other half have moderate-to-high levels of trust in each. A mere 5% of respondents rated all 3 institutions with the highest level of trust, validating the popular culture idea that there is widespread public skepticism concerning political systems.
+
 ### Testing Election Confidence Model Accuracy
 ```{r}
 # Variable of importance
@@ -470,6 +472,8 @@ Model accuracy is 54%.
 - Key takeaways, connecting findings and ideas to big picture of values
 
 The tolerance tree illustrates that 78% of respondents responded favorably or neutrally to having immigrants as neighbors. Within this cohort, 27% of respondents do not want immigrants as neighbors but do not think that immigrants increase the risk of terrorism. These people are hesitant about immigrants in their immediate vicinity but don't fear them on a national level. In contrast, 12% of respondents feel that immigration increases the risk of terrorism but feel neutrally or positively about have immigrants as neighbors. All in all, that's 44% of respondents that hold different, somewhat conflicting views about immigrants as neighbors and as a threat to domestic security. Investigating other values that may be driving this discrepancy in immigration attitudes would be a good use of the values dataset. 
+
+A more straightforward decision tree can be found in the political systems tree, which predicts confidence in elections using confidence in the UN and confidence in the courts. A very small percentage (5%) of people responded with high confidence in all 3, and the confidence in elections results were almost exactly 50/50: 51% confident, and 49% possessing little-to-no confidence. This model confirms two hypothesis. First, people are skeptical of their national political institutions across the world, and of the UN, which is purported to be the ultimate champions of international peace and freedom. Second, people tend to hold similar viewpoints towards each of these three political groups. Despite the fact that the courts and elections are highly variable from country to country, and involvement and support from the UN also varries accordingly, people tend to hold the three groups in similar regard.
 
 ## Recommendations
 - Next steps for our final week of class // final report
