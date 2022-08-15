@@ -278,6 +278,8 @@ The visualization of a correlation matrix above indicates the extent to which ea
 - The second bucket relates to ethical values / social views
 - The third bucket relates to immigration / beliefs about immigrant populations
 
+While correlation analysis is typically reserved for numeric variables, we felt it would be a useful exploratory analysis to get an approximate feel for the types of relationships that may inform our exploratory data analysis and later, our classification decision tree algorithms. Our options for correlation with numeric data were limited. Our numeric values are limited to demographic information rather than values, as values are measured on a Likert scale. Furthermore, there is a growing body of research in support of using ordinal variables as if they were continuous or factor variables for correlation or other analysis (such as factor analysis) is acceptable (Robitzsch, 2020). Robitzsch, a German researcher, asserts that there is no "correct" modeling strategy, and that ordinal variables may be just as well suited for non-ordinal models as they are for ordinal ones. Treating ordinal variables as continuous, and using Pearson correlations to show relationships between them, may result in less bias than treating the ordinal variables as ordinal. 
+
 Although this visualization of a correlation matrix reveals many interesting insights into how our variables correlate, the following are just a couple of key insights relating to the focus of our project — religion, immigration, and ethics:
 
 - Some correlations occur between variables in the first bucket. For example, `Settlement.type` and `Town size` are strongly correlated; rural areas have few residents, urban areas have many. Similarly, `Marital Status` correlates with `Age` and `Number.Children`; `Income.Group` correlates with `Education`; `Happiness` correlates with `Health`. These are all to be expected.
@@ -642,3 +644,4 @@ Humans are complex. We are moderately to extremely consistent on some things (e.
 - Future analysis would include more advanced predictive modeling techniques, starting with random forests. We cannot know what we have not yet studied, but we would hope to find other useful modeling techniques beyond decision trees that pair well with ordinal (Likert) data!
 
 ## Works Cited
+Robitzsch, A. (2020). *Why Ordinal Variables Can (Almost) Always Be Treated as Continuous Variables: Clarifying Assumptions of Robust Continuous and Ordinal Factor Analysis Estimation Methods.* Frontiers. https://www.frontiersin.org/articles/10.3389/feduc.2020.589965/full
