@@ -1,30 +1,40 @@
-Module 4 Final Project — Milestone 2: Draft Report
+Module 6 Final Project — Final Report
 ================
 Abby Bridgers and Justin Ehringhaus
-Last edited August 14, 2022 at 18:54
+Last edited August 16, 2022 at 18:14
 
--   [Introduction](#introduction)
-    -   [Overview](#overview)
-    -   [Methods and Business
-        Questions](#methods-and-business-questions)
-    -   [Missing data? Duplicates? Cleanliness?
-        Outliers?](#missing-data-duplicates-cleanliness-outliers)
--   [Data Preparation](#data-preparation)
--   [Exploratory Data Analysis](#exploratory-data-analysis)
--   [Predictive Modeling Techniques and
-    Interpretations](#predictive-modeling-techniques-and-interpretations)
-    -   [Business Question \#1: Classifying Immigrants versus
-        Nonimmigrants](#business-question-1-classifying-immigrants-versus-nonimmigrants)
-    -   [Business Question \#2: Predicting whether an individual views
-        teaching tolerance as important based on their beliefs regarding
-        immigration](#business-question-2-predicting-whether-an-individual-views-teaching-tolerance-as-important-based-on-their-beliefs-regarding-immigration)
-    -   [Business Question \#3: Classifying Religious
-        Denominations](#business-question-3-classifying-religious-denominations)
-    -   [Business Question \#4: Predicting Confidence in
-        Elections](#business-question-4-predicting-confidence-in-elections)
--   [Interpretations](#interpretations)
--   [Recommendations & Conclusions](#recommendations--conclusions)
--   [Works Cited](#works-cited)
+-   <a href="#introduction" id="toc-introduction">Introduction</a>
+    -   <a href="#overview" id="toc-overview">Overview</a>
+    -   <a href="#methods-and-business-questions"
+        id="toc-methods-and-business-questions">Methods and Business
+        Questions</a>
+-   <a href="#data-preparation" id="toc-data-preparation">Data
+    Preparation</a>
+-   <a href="#exploratory-data-analysis"
+    id="toc-exploratory-data-analysis">Exploratory Data Analysis</a>
+-   <a href="#predictive-modeling-techniques-and-interpretations"
+    id="toc-predictive-modeling-techniques-and-interpretations">Predictive
+    Modeling Techniques and Interpretations</a>
+    -   <a
+        href="#business-question-1-classifying-immigrants-versus-nonimmigrants"
+        id="toc-business-question-1-classifying-immigrants-versus-nonimmigrants">Business
+        Question #1: Classifying Immigrants versus Nonimmigrants</a>
+    -   <a
+        href="#business-question-2-predicting-whether-an-individual-views-teaching-tolerance-as-important-based-on-their-beliefs-regarding-immigration"
+        id="toc-business-question-2-predicting-whether-an-individual-views-teaching-tolerance-as-important-based-on-their-beliefs-regarding-immigration">Business
+        Question #2: Predicting whether an individual views teaching tolerance
+        as important based on their beliefs regarding immigration</a>
+    -   <a href="#business-question-3-classifying-religious-denominations"
+        id="toc-business-question-3-classifying-religious-denominations">Business
+        Question #3: Classifying Religious Denominations</a>
+    -   <a href="#business-question-4-predicting-confidence-in-elections"
+        id="toc-business-question-4-predicting-confidence-in-elections">Business
+        Question #4: Predicting Confidence in Elections</a>
+-   <a href="#interpretations" id="toc-interpretations">Interpretations</a>
+-   <a href="#recommendations--conclusions"
+    id="toc-recommendations--conclusions">Recommendations &amp;
+    Conclusions</a>
+-   <a href="#works-cited" id="toc-works-cited">Works Cited</a>
 
 ------------------------------------------------------------------------
 
@@ -56,6 +66,13 @@ interview format to investigate human beliefs. The data is made
 available in waves. Time series data including all waves pooled between
 1981-2022 is also available.
 
+Our firm was contacted by WVS and asked to complete a comprehensive data
+mining project using the latest available data. The team (Justin and
+Abby) was tasked with extracting deeper meaning from the data, and
+beginning to unlock answers to key questions related to some of the most
+timely conversations around values. These include but are not limited to
+attitudes around immigration, religion, and homosexuality.
+
 While examining the pooled dataset would certainly be interesting to
 answer questions about changes in worldwide values, beliefs, and norms,
 we are opting to limit the scope of our project to recent years (Wave 7:
@@ -67,35 +84,21 @@ about 90%. More details to follow.
 
 ##### Methods and Business Questions
 
-Specifically, our team (Abby Bridgers and Justin Ehringhaus) is
-interested in views on religion, immigration, ethics, governmental
-organizations, and how values on these topics differ across the globe.
-We analyze particular subsets of the dataset using exploratory and
-predictive techniques suited to the size, scope, and types of data under
-consideration. For example, we chose to incorporate geospatial
-visualization techniques as our dataset relates to the world, and we
-chose to orient our predictive modeling around decision trees because of
-our restriction to ordinal (Likert) data. Our analyses are inspired by
-the four business questions listed below:
+Our team is interested in exploring values on religion, immigration,
+ethics, and governmental-related topics. We analyze particular subsets
+of the dataset using exploratory and predictive techniques suited to the
+size, scope, and types of data under consideration. For example, we
+chose to incorporate geospatial visualization techniques as our dataset
+relates to the world, and we chose to orient our predictive modeling
+around decision trees because of our restriction to ordinal (Likert)
+data. Our analyses are inspired by the four business questions listed
+below:
 
 -   \#1: Predicting whether or not an individual is an immigrant
 -   \#2: Predicting whether an individual views teaching tolerance as
     important based on their beliefs regarding immigration
 -   \#3: Predicting the religious denomination of an individual
 -   \#4: Predicting an individual’s confidence in elections
-
-##### Missing data? Duplicates? Cleanliness? Outliers?
-
-While there was missing data found in our dataset, we elected to refrain
-from cleaning the data because doing so may unintentionally falsify the
-results of the WVS survey. In a typical data cleaning process, outliers
-are removed to concentrate on the central tendency of the data. Missing
-data is removed and/or standardized for numerical analysis. Since our
-data is ordinal, and we are interested in including and analyzing the
-data holistically, we did not feel that it would be appropriate to
-“clean” the data beyond changing column names, selecting attributes of
-interest, and ensuring that there was not a prohibitory amount of NA
-values found in our subsets of interest.
 
 ------------------------------------------------------------------------
 
@@ -193,98 +196,104 @@ myskim <- skim(wvs_subset)
 myskim
 ```
 
-|                                                  |             |
-|:-------------------------------------------------|:------------|
-| Name                                             | wvs\_subset |
-| Number of rows                                   | 87822       |
-| Number of columns                                | 49          |
-| \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_   |             |
-| Column type frequency:                           |             |
-| character                                        | 1           |
-| numeric                                          | 48          |
-| \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ |             |
-| Group variables                                  | None        |
+|                                                  |            |
+|:-------------------------------------------------|:-----------|
+| Name                                             | wvs_subset |
+| Number of rows                                   | 87822      |
+| Number of columns                                | 49         |
+| \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_   |            |
+| Column type frequency:                           |            |
+| character                                        | 1          |
+| numeric                                          | 48         |
+| \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ |            |
+| Group variables                                  | None       |
 
 Data summary
 
 **Variable type: character**
 
-| skim\_variable | n\_missing | complete\_rate | min | max | empty | n\_unique | whitespace |
-|:---------------|-----------:|---------------:|----:|----:|------:|----------:|-----------:|
-| Country        |          0 |              1 |   3 |   3 |     0 |        59 |          0 |
+| skim_variable | n_missing | complete_rate | min | max | empty | n_unique | whitespace |
+|:--------------|----------:|--------------:|----:|----:|------:|---------:|-----------:|
+| Country       |         0 |             1 |   3 |   3 |     0 |       59 |          0 |
 
 **Variable type: numeric**
 
-| skim\_variable                 | n\_missing | complete\_rate |       mean |         sd |        p0 |        p25 |        p50 |        p75 |       p100 | hist  |
-|:-------------------------------|-----------:|---------------:|-----------:|-----------:|----------:|-----------:|-----------:|-----------:|-----------:|:------|
-| Longitude                      |      27098 |           0.69 |      36.16 |      68.09 |   -156.34 |       7.66 |      39.94 |     100.27 |     156.89 | ▁▃▅▇▇ |
-| Latitude                       |      27094 |           0.69 |      21.35 |      19.95 |    -43.26 |       6.99 |      24.75 |      35.70 |     100.35 | ▁▅▇▂▁ |
-| Settlement.type                |        207 |           1.00 |       3.07 |       1.50 |      1.00 |       2.00 |       3.00 |       5.00 |       5.00 | ▆▆▅▅▇ |
-| Country.and.year               |          0 |           1.00 | 4255875.58 | 2465523.95 | 202018.00 | 1702018.00 | 4172020.00 | 6302018.00 | 8622021.00 | ▇▃▇▅▆ |
-| Town.size                      |       1274 |           0.99 |       3.15 |       1.45 |      1.00 |       2.00 |       3.00 |       5.00 |       5.00 | ▆▅▆▆▇ |
-| Age                            |        339 |           1.00 |      42.85 |      16.36 |     16.00 |      29.00 |      41.00 |      55.00 |     103.00 | ▇▇▆▂▁ |
-| Income.Group                   |       2330 |           0.97 |       4.86 |       2.08 |      1.00 |       3.00 |       5.00 |       6.00 |      10.00 | ▃▅▇▃▁ |
-| Ethnic.Group                   |       9486 |           0.89 |  416251.81 |  250427.10 |  20001.00 |  158002.00 |  410004.00 |  630001.00 |  862005.00 | ▇▃▇▅▅ |
-| Immigrant                      |        344 |           1.00 |       1.06 |       0.24 |      1.00 |       1.00 |       1.00 |       1.00 |       2.00 | ▇▁▁▁▁ |
-| Religion                       |       2485 |           0.97 |       3.00 |       2.62 |      0.00 |       1.00 |       3.00 |       5.00 |       9.00 | ▇▃▆▂▁ |
-| Marital.Status                 |        504 |           0.99 |       2.65 |       2.15 |      1.00 |       1.00 |       1.00 |       5.00 |       6.00 | ▇▁▁▁▃ |
-| Education                      |        818 |           0.99 |       3.55 |       2.03 |      0.00 |       2.00 |       3.00 |       5.00 |       8.00 | ▃▇▂▅▂ |
-| Number.Children                |       1201 |           0.99 |       1.77 |       1.74 |      0.00 |       0.00 |       2.00 |       3.00 |      24.00 | ▇▁▁▁▁ |
-| Happiness                      |        574 |           0.99 |       1.86 |       0.71 |      1.00 |       1.00 |       2.00 |       2.00 |       4.00 | ▅▇▁▂▁ |
-| Health                         |        254 |           1.00 |       2.19 |       0.87 |      1.00 |       2.00 |       2.00 |       3.00 |       5.00 | ▃▇▅▁▁ |
-| votes.locally                  |       4448 |           0.95 |       1.65 |       0.84 |      1.00 |       1.00 |       1.00 |       2.00 |       4.00 | ▇▃▁▂▁ |
-| votes.nationally               |       5325 |           0.94 |       1.59 |       0.84 |      1.00 |       1.00 |       1.00 |       2.00 |       4.00 | ▇▃▁▂▁ |
-| confidence.elections           |       3604 |           0.96 |       2.63 |       0.95 |      1.00 |       2.00 |       3.00 |       3.00 |       4.00 | ▃▇▁▇▅ |
-| confidence.courts              |       3250 |           0.96 |       2.44 |       0.94 |      1.00 |       2.00 |       2.00 |       3.00 |       4.00 | ▃▇▁▆▃ |
-| confidence.UN                  |      12467 |           0.86 |       2.59 |       0.94 |      1.00 |       2.00 |       3.00 |       3.00 |       4.00 | ▃▇▁▇▅ |
-| environment.vs.econgrow        |       3927 |           0.96 |       1.46 |       0.56 |      1.00 |       1.00 |       1.00 |       2.00 |       3.00 | ▇▁▆▁▁ |
-| cheating.taxes                 |       1134 |           0.99 |       2.22 |       2.14 |      1.00 |       1.00 |       1.00 |       3.00 |      10.00 | ▇▁▁▁▁ |
-| gov.video.surveillance         |       3169 |           0.96 |       2.28 |       1.10 |      1.00 |       1.00 |       2.00 |       3.00 |       4.00 | ▇▇▁▅▅ |
-| gov.email.monitoring           |       3941 |           0.96 |       2.89 |       1.07 |      1.00 |       2.00 |       3.00 |       4.00 |       4.00 | ▃▅▁▆▇ |
-| gov.collecting.info            |       3633 |           0.96 |       2.95 |       1.07 |      1.00 |       2.00 |       3.00 |       4.00 |       4.00 | ▂▃▁▅▇ |
-| terrorism                      |       4324 |           0.95 |       1.80 |       1.81 |      1.00 |       1.00 |       1.00 |       2.00 |      10.00 | ▇▁▁▁▁ |
-| death.penalty                  |       2180 |           0.98 |       4.12 |       3.19 |      1.00 |       1.00 |       3.00 |       7.00 |      10.00 | ▇▂▃▂▂ |
-| suicide                        |       2026 |           0.98 |       2.49 |       2.37 |      1.00 |       1.00 |       1.00 |       3.00 |      10.00 | ▇▁▂▁▁ |
-| beating.wife                   |        939 |           0.99 |       1.85 |       1.85 |      1.00 |       1.00 |       1.00 |       2.00 |      10.00 | ▇▁▁▁▁ |
-| beating.children               |        951 |           0.99 |       2.87 |       2.55 |      1.00 |       1.00 |       1.00 |       5.00 |      10.00 | ▇▂▂▁▁ |
-| homosexuality                  |       5691 |           0.94 |       3.86 |       3.34 |      1.00 |       1.00 |       2.00 |       6.00 |      10.00 | ▇▂▂▁▂ |
-| prostitution                   |       8421 |           0.90 |       2.97 |       2.65 |      1.00 |       1.00 |       1.00 |       5.00 |      10.00 | ▇▂▂▁▁ |
-| abortion                       |       1979 |           0.98 |       3.41 |       2.92 |      1.00 |       1.00 |       2.00 |       5.00 |      10.00 | ▇▂▂▁▁ |
-| divorce                        |       1729 |           0.98 |       4.90 |       3.17 |      1.00 |       1.00 |       5.00 |       8.00 |      10.00 | ▇▃▆▃▅ |
-| casual.sex                     |       7380 |           0.92 |       3.43 |       2.98 |      1.00 |       1.00 |       2.00 |       5.00 |      10.00 | ▇▂▂▁▂ |
-| sex.before.marriage            |       4525 |           0.95 |       4.51 |       3.38 |      1.00 |       1.00 |       4.00 |       8.00 |      10.00 | ▇▂▃▂▃ |
-| importance.leisure.time        |        473 |           0.99 |       1.79 |       0.78 |      1.00 |       1.00 |       2.00 |       2.00 |       4.00 | ▇▇▁▂▁ |
-| importance.work                |       1047 |           0.99 |       1.54 |       0.77 |      1.00 |       1.00 |       1.00 |       2.00 |       4.00 | ▇▃▁▁▁ |
-| imm.threatens.jobs.when.scarce |        760 |           0.99 |       2.17 |       1.16 |      1.00 |       1.00 |       2.00 |       3.00 |       5.00 | ▇▇▃▃▁ |
-| imm.fills.useful.jobs          |       2411 |           0.97 |       1.18 |       0.86 |      0.00 |       0.00 |       1.00 |       2.00 |       2.00 | ▅▁▃▁▇ |
-| imm.strengthens.cultural.div   |       2813 |           0.97 |       1.27 |       0.86 |      0.00 |       0.00 |       2.00 |       2.00 |       2.00 | ▃▁▃▁▇ |
-| imm.increases.crime.rate       |       2467 |           0.97 |       1.15 |       0.87 |      0.00 |       0.00 |       1.00 |       2.00 |       2.00 | ▆▁▃▁▇ |
-| imm.gives.political.asylum     |       7054 |           0.92 |       1.20 |       0.84 |      0.00 |       0.00 |       1.00 |       2.00 |       2.00 | ▅▁▅▁▇ |
-| imm.increases.terrorism.risk   |       2807 |           0.97 |       1.13 |       0.87 |      0.00 |       0.00 |       1.00 |       2.00 |       2.00 | ▆▁▃▁▇ |
-| imm.helps.poor                 |       2521 |           0.97 |       1.37 |       0.81 |      0.00 |       1.00 |       2.00 |       2.00 |       2.00 | ▃▁▃▁▇ |
-| imm.increases.unemployment     |       2076 |           0.98 |       1.21 |       0.87 |      0.00 |       0.00 |       2.00 |       2.00 |       2.00 | ▅▁▃▁▇ |
-| imm.brings.social.conflict     |       2530 |           0.97 |       1.23 |       0.85 |      0.00 |       0.00 |       1.00 |       2.00 |       2.00 | ▅▁▃▁▇ |
-| imm.policy.preference          |       5149 |           0.94 |       2.58 |       0.80 |      1.00 |       2.00 |       3.00 |       3.00 |       4.00 | ▂▆▁▇▂ |
+| skim_variable                  | n_missing | complete_rate |       mean |         sd |        p0 |        p25 |        p50 |        p75 |       p100 | hist  |
+|:-------------------------------|----------:|--------------:|-----------:|-----------:|----------:|-----------:|-----------:|-----------:|-----------:|:------|
+| Longitude                      |     27098 |          0.69 |      36.16 |      68.09 |   -156.34 |       7.66 |      39.94 |     100.27 |     156.89 | ▁▃▅▇▇ |
+| Latitude                       |     27094 |          0.69 |      21.35 |      19.95 |    -43.26 |       6.99 |      24.75 |      35.70 |     100.35 | ▁▅▇▂▁ |
+| Settlement.type                |       207 |          1.00 |       3.07 |       1.50 |      1.00 |       2.00 |       3.00 |       5.00 |       5.00 | ▆▆▅▅▇ |
+| Country.and.year               |         0 |          1.00 | 4255875.58 | 2465523.95 | 202018.00 | 1702018.00 | 4172020.00 | 6302018.00 | 8622021.00 | ▇▃▇▅▆ |
+| Town.size                      |      1274 |          0.99 |       3.15 |       1.45 |      1.00 |       2.00 |       3.00 |       5.00 |       5.00 | ▆▅▆▆▇ |
+| Age                            |       339 |          1.00 |      42.85 |      16.36 |     16.00 |      29.00 |      41.00 |      55.00 |     103.00 | ▇▇▆▂▁ |
+| Income.Group                   |      2330 |          0.97 |       4.86 |       2.08 |      1.00 |       3.00 |       5.00 |       6.00 |      10.00 | ▃▅▇▃▁ |
+| Ethnic.Group                   |      9486 |          0.89 |  416251.81 |  250427.10 |  20001.00 |  158002.00 |  410004.00 |  630001.00 |  862005.00 | ▇▃▇▅▅ |
+| Immigrant                      |       344 |          1.00 |       1.06 |       0.24 |      1.00 |       1.00 |       1.00 |       1.00 |       2.00 | ▇▁▁▁▁ |
+| Religion                       |      2485 |          0.97 |       3.00 |       2.62 |      0.00 |       1.00 |       3.00 |       5.00 |       9.00 | ▇▃▆▂▁ |
+| Marital.Status                 |       504 |          0.99 |       2.65 |       2.15 |      1.00 |       1.00 |       1.00 |       5.00 |       6.00 | ▇▁▁▁▃ |
+| Education                      |       818 |          0.99 |       3.55 |       2.03 |      0.00 |       2.00 |       3.00 |       5.00 |       8.00 | ▃▇▂▅▂ |
+| Number.Children                |      1201 |          0.99 |       1.77 |       1.74 |      0.00 |       0.00 |       2.00 |       3.00 |      24.00 | ▇▁▁▁▁ |
+| Happiness                      |       574 |          0.99 |       1.86 |       0.71 |      1.00 |       1.00 |       2.00 |       2.00 |       4.00 | ▅▇▁▂▁ |
+| Health                         |       254 |          1.00 |       2.19 |       0.87 |      1.00 |       2.00 |       2.00 |       3.00 |       5.00 | ▃▇▅▁▁ |
+| votes.locally                  |      4448 |          0.95 |       1.65 |       0.84 |      1.00 |       1.00 |       1.00 |       2.00 |       4.00 | ▇▃▁▂▁ |
+| votes.nationally               |      5325 |          0.94 |       1.59 |       0.84 |      1.00 |       1.00 |       1.00 |       2.00 |       4.00 | ▇▃▁▂▁ |
+| confidence.elections           |      3604 |          0.96 |       2.63 |       0.95 |      1.00 |       2.00 |       3.00 |       3.00 |       4.00 | ▃▇▁▇▅ |
+| confidence.courts              |      3250 |          0.96 |       2.44 |       0.94 |      1.00 |       2.00 |       2.00 |       3.00 |       4.00 | ▃▇▁▆▃ |
+| confidence.UN                  |     12467 |          0.86 |       2.59 |       0.94 |      1.00 |       2.00 |       3.00 |       3.00 |       4.00 | ▃▇▁▇▅ |
+| environment.vs.econgrow        |      3927 |          0.96 |       1.46 |       0.56 |      1.00 |       1.00 |       1.00 |       2.00 |       3.00 | ▇▁▆▁▁ |
+| cheating.taxes                 |      1134 |          0.99 |       2.22 |       2.14 |      1.00 |       1.00 |       1.00 |       3.00 |      10.00 | ▇▁▁▁▁ |
+| gov.video.surveillance         |      3169 |          0.96 |       2.28 |       1.10 |      1.00 |       1.00 |       2.00 |       3.00 |       4.00 | ▇▇▁▅▅ |
+| gov.email.monitoring           |      3941 |          0.96 |       2.89 |       1.07 |      1.00 |       2.00 |       3.00 |       4.00 |       4.00 | ▃▅▁▆▇ |
+| gov.collecting.info            |      3633 |          0.96 |       2.95 |       1.07 |      1.00 |       2.00 |       3.00 |       4.00 |       4.00 | ▂▃▁▅▇ |
+| terrorism                      |      4324 |          0.95 |       1.80 |       1.81 |      1.00 |       1.00 |       1.00 |       2.00 |      10.00 | ▇▁▁▁▁ |
+| death.penalty                  |      2180 |          0.98 |       4.12 |       3.19 |      1.00 |       1.00 |       3.00 |       7.00 |      10.00 | ▇▂▃▂▂ |
+| suicide                        |      2026 |          0.98 |       2.49 |       2.37 |      1.00 |       1.00 |       1.00 |       3.00 |      10.00 | ▇▁▂▁▁ |
+| beating.wife                   |       939 |          0.99 |       1.85 |       1.85 |      1.00 |       1.00 |       1.00 |       2.00 |      10.00 | ▇▁▁▁▁ |
+| beating.children               |       951 |          0.99 |       2.87 |       2.55 |      1.00 |       1.00 |       1.00 |       5.00 |      10.00 | ▇▂▂▁▁ |
+| homosexuality                  |      5691 |          0.94 |       3.86 |       3.34 |      1.00 |       1.00 |       2.00 |       6.00 |      10.00 | ▇▂▂▁▂ |
+| prostitution                   |      8421 |          0.90 |       2.97 |       2.65 |      1.00 |       1.00 |       1.00 |       5.00 |      10.00 | ▇▂▂▁▁ |
+| abortion                       |      1979 |          0.98 |       3.41 |       2.92 |      1.00 |       1.00 |       2.00 |       5.00 |      10.00 | ▇▂▂▁▁ |
+| divorce                        |      1729 |          0.98 |       4.90 |       3.17 |      1.00 |       1.00 |       5.00 |       8.00 |      10.00 | ▇▃▆▃▅ |
+| casual.sex                     |      7380 |          0.92 |       3.43 |       2.98 |      1.00 |       1.00 |       2.00 |       5.00 |      10.00 | ▇▂▂▁▂ |
+| sex.before.marriage            |      4525 |          0.95 |       4.51 |       3.38 |      1.00 |       1.00 |       4.00 |       8.00 |      10.00 | ▇▂▃▂▃ |
+| importance.leisure.time        |       473 |          0.99 |       1.79 |       0.78 |      1.00 |       1.00 |       2.00 |       2.00 |       4.00 | ▇▇▁▂▁ |
+| importance.work                |      1047 |          0.99 |       1.54 |       0.77 |      1.00 |       1.00 |       1.00 |       2.00 |       4.00 | ▇▃▁▁▁ |
+| imm.threatens.jobs.when.scarce |       760 |          0.99 |       2.17 |       1.16 |      1.00 |       1.00 |       2.00 |       3.00 |       5.00 | ▇▇▃▃▁ |
+| imm.fills.useful.jobs          |      2411 |          0.97 |       1.18 |       0.86 |      0.00 |       0.00 |       1.00 |       2.00 |       2.00 | ▅▁▃▁▇ |
+| imm.strengthens.cultural.div   |      2813 |          0.97 |       1.27 |       0.86 |      0.00 |       0.00 |       2.00 |       2.00 |       2.00 | ▃▁▃▁▇ |
+| imm.increases.crime.rate       |      2467 |          0.97 |       1.15 |       0.87 |      0.00 |       0.00 |       1.00 |       2.00 |       2.00 | ▆▁▃▁▇ |
+| imm.gives.political.asylum     |      7054 |          0.92 |       1.20 |       0.84 |      0.00 |       0.00 |       1.00 |       2.00 |       2.00 | ▅▁▅▁▇ |
+| imm.increases.terrorism.risk   |      2807 |          0.97 |       1.13 |       0.87 |      0.00 |       0.00 |       1.00 |       2.00 |       2.00 | ▆▁▃▁▇ |
+| imm.helps.poor                 |      2521 |          0.97 |       1.37 |       0.81 |      0.00 |       1.00 |       2.00 |       2.00 |       2.00 | ▃▁▃▁▇ |
+| imm.increases.unemployment     |      2076 |          0.98 |       1.21 |       0.87 |      0.00 |       0.00 |       2.00 |       2.00 |       2.00 | ▅▁▃▁▇ |
+| imm.brings.social.conflict     |      2530 |          0.97 |       1.23 |       0.85 |      0.00 |       0.00 |       1.00 |       2.00 |       2.00 | ▅▁▃▁▇ |
+| imm.policy.preference          |      5149 |          0.94 |       2.58 |       0.80 |      1.00 |       2.00 |       3.00 |       3.00 |       4.00 | ▂▆▁▇▂ |
 
-The subset of the dataset contains 87822 rows and 49 columns.
+The subset of the dataset contains 87822 rows and 49 columns. As many of
+the variables are ordinal (Likert scales), the descriptive statistics
+generated by the skim give an accurate picture of their distribution and
+the characteristics. However, certain variables such as `Ethnic.Group`,
+`Country.and.year`, `Longitude`, and `Latitude` contain nominal, numeric
+data, and thus the descriptive statistics for these variables can be
+ignored as it is meaningless.
 
 Most variables are numeric; only `Country` is classified as a character
 vector. `Longitude` and `Latitude` are missing the most data with a
 completion rate of 0.6914441, but overall the mean completion rate is
-0.9555783, which signifies that missing data is not too much of an issue
-for the particular variables under consideration.
+0.9555783. This overall high completion rate signifies that missing data
+is not too much of an issue for the particular variables we are
+considering. However, it is necessary to assess whether missing data
+should be removed, retained, or imputed.
 
-As many of the variables are ordinal (Likert scales), the descriptive
-statistics generated by the skim give an accurate picture of their
-distribution and the characteristics. However, certain variables such as
-`Ethnic.Group`, `Country.and.year`, `Longitude`, and `Latitude` contain
-nominal, numeric data, and thus the descriptive statistics for these
-variables can be ignored as it is meaningless.
-
-**Correlations in the data**:
+The `aggr` function from the VIM package can help in visualizing
+combinations of missing values, which will be useful for understanding
+what variables are missing the most data and what combinations of
+variables are missing the most data. Keeping in mind our subset contains
+87822 rows, the number on the bottom-right of each plot below shows the
+number of “complete cases,” where no data is missing.
 
 ``` r
-# ordinal, numeric data only 
+# ordinal, numeric data only
 wvs_subset_ordinal <- 
   wvs_subset %>% 
   select(-Longitude,
@@ -294,6 +303,104 @@ wvs_subset_ordinal <-
          -Country.and.year,
          -Religion)
 
+wvs_subset_demographic <- wvs_subset_ordinal[1:10]
+wvs_subset_political <- wvs_subset_ordinal[11:16]
+wvs_subset_ethical <- wvs_subset_ordinal[21:25]
+wvs_subset_social <- wvs_subset_ordinal[26:31]
+wvs_subset_immigration <- wvs_subset_ordinal[34:40]
+
+par(oma=c(0,0,2,0))
+plot(aggr(wvs_subset_demographic, plot = FALSE), 
+     numbers = TRUE, 
+     cex.axis = .5, 
+     prop = FALSE,
+     only.miss = TRUE)
+title("Missingness in Demographic Data", outer = TRUE)
+```
+
+![](ALY6040-Module2-FinalProject-FinalReport-AbbyBridgers-JustinEhringhaus_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+
+``` r
+par(oma=c(0,0,2,0))
+plot(aggr(wvs_subset_political, plot = FALSE), 
+     numbers = TRUE, 
+     cex.axis = .4, 
+     prop = FALSE,
+     only.miss = TRUE)
+title("Missingness in Political Participation Data", outer = TRUE)
+```
+
+![](ALY6040-Module2-FinalProject-FinalReport-AbbyBridgers-JustinEhringhaus_files/figure-gfm/unnamed-chunk-5-2.png)<!-- -->
+
+``` r
+par(oma=c(0,0,2,0))
+plot(aggr(wvs_subset_ethical, plot = FALSE), 
+     numbers = TRUE, 
+     cex.axis = .6, 
+     prop = FALSE,
+     only.miss = TRUE)
+title("Missingness in Ethical Values Data", outer = TRUE)
+```
+
+![](ALY6040-Module2-FinalProject-FinalReport-AbbyBridgers-JustinEhringhaus_files/figure-gfm/unnamed-chunk-5-3.png)<!-- -->
+
+``` r
+par(oma=c(0,0,2,0))
+plot(aggr(wvs_subset_social, plot = FALSE), 
+     numbers = TRUE, 
+     cex.axis = .6, 
+     prop = FALSE,
+     only.miss = TRUE)
+title("Missingness in Social Views Data", outer = TRUE)
+```
+
+![](ALY6040-Module2-FinalProject-FinalReport-AbbyBridgers-JustinEhringhaus_files/figure-gfm/unnamed-chunk-5-4.png)<!-- -->
+
+``` r
+par(oma=c(0,0,2,0))
+plot(aggr(wvs_subset_immigration, plot = FALSE), 
+     numbers = TRUE, 
+     cex.axis = .3, 
+     prop = FALSE,
+     only.miss = TRUE)
+title("Missingness in Immigration Data", outer = TRUE)
+```
+
+![](ALY6040-Module2-FinalProject-FinalReport-AbbyBridgers-JustinEhringhaus_files/figure-gfm/unnamed-chunk-5-5.png)<!-- -->
+
+Although the overall completion rate is relatively high (0.9555783), the
+VIM plots reveal that missing data is an ubiquitous issue. Furthermore,
+our predictive modeling efforts will require complete datasets with no
+missing values.
+
+Imputing the data is not a good option. The WVS dataset contains
+qualitative survey data, and imputing it would be both unethical and
+misrepresentative. Each record contains the beliefs and experiences of a
+particular individual. While the mean value of beliefs on homosexuality
+in the dataset is 3.8643022 out of 10 (1 = never justifiable, 10 =
+always justifiable), if we were to assign this mean value to all those
+who chose not to answer this question, we would inaccurately be
+contributing to the regression toward the mean.
+
+Retaining the data would be ideal, but our predictive modeling
+techniques such as decision trees require “complete cases,” where all
+records must be present. For this reason, we are opting to remove
+records with missing values. The impact of our decision can be seen
+below: `wvs_subset_ordinal` had 87822 rows before cleaning, and …
+
+``` r
+wvs_subset_ordinal <- na.omit(wvs_subset_ordinal)
+```
+
+… after cleaning `wvs_subset_ordinal` has 49064 rows.
+
+Although this reduces the size of the dataset by a considerable portion,
+it is the best option based on our inability to impute nor keep the
+data.
+
+**Correlations in the data**:
+
+``` r
 # further subsetting to topics of highest interest
 wvs_subset_correlations <- 
   wvs_subset_ordinal %>% 
@@ -349,7 +456,7 @@ corrplot(cor,
                       'imm.policy.preference'))
 ```
 
-![](ALY6040-Module2-FinalProject-DraftReport-AbbyBridgers-JustinEhringhaus_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+![](ALY6040-Module2-FinalProject-FinalReport-AbbyBridgers-JustinEhringhaus_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 The visualization of a correlation matrix above indicates the extent to
 which each variable, compared to one another, correlates or relates.
@@ -363,6 +470,22 @@ it does not, or should not, exist:
 -   The second bucket relates to ethical values / social views
 -   The third bucket relates to immigration / beliefs about immigrant
     populations
+
+While correlation analysis is typically reserved for numeric variables,
+we felt it would be a useful exploratory analysis to get an approximate
+feel for the types of relationships that may inform our EDA and later,
+our classification decision tree algorithms. Our options for correlation
+with numeric data were limited. Our numeric values are limited to
+demographic information rather than values, as values are measured on a
+Likert scale. Furthermore, there is a growing body of research in
+support of using ordinal variables as if they were continuous or factor
+variables for correlation or other analysis (such as factor analysis) is
+acceptable (Robitzsch, 2020). Robitzsch, a German researcher, asserts
+that there is no “correct” modeling strategy, and that ordinal variables
+may be just as well suited for non-ordinal models as they are for
+ordinal ones. Treating ordinal variables as continuous, and using
+Pearson correlations to show relationships between them, may result in
+less bias than treating the ordinal variables as ordinal.
 
 Although this visualization of a correlation matrix reveals many
 interesting insights into how our variables correlate, the following are
@@ -427,7 +550,7 @@ map_color_range(wvs_subset, wvs_subset$homosexuality,
                 min_color = "red", max_color = "green")
 ```
 
-![](ALY6040-Module2-FinalProject-DraftReport-AbbyBridgers-JustinEhringhaus_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](ALY6040-Module2-FinalProject-FinalReport-AbbyBridgers-JustinEhringhaus_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 Geospatial data can reveal many interesting trends. For example, we can
 visualize beliefs on `homosexuality`, where greener colors represent
@@ -443,7 +566,7 @@ map_color_range(wvs_subset, wvs_subset$imm.strengthens.cultural.div,
                 min_color = "red", max_color = "green")
 ```
 
-![](ALY6040-Module2-FinalProject-DraftReport-AbbyBridgers-JustinEhringhaus_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](ALY6040-Module2-FinalProject-FinalReport-AbbyBridgers-JustinEhringhaus_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 ``` r
 map("world")
@@ -452,7 +575,7 @@ map_color_range(wvs_subset, wvs_subset$imm.increases.terrorism.risk,
                 min_color = "green", max_color = "red")
 ```
 
-![](ALY6040-Module2-FinalProject-DraftReport-AbbyBridgers-JustinEhringhaus_files/figure-gfm/unnamed-chunk-7-2.png)<!-- -->
+![](ALY6040-Module2-FinalProject-FinalReport-AbbyBridgers-JustinEhringhaus_files/figure-gfm/unnamed-chunk-9-2.png)<!-- -->
 
 The two visualizations above, when compared with one another, reveal an
 interesting dichotomy in beliefs on immigration. On the one hand, people
@@ -536,7 +659,7 @@ fancyRpartPlot(immigrant_tree_model,
                type = 5)
 ```
 
-![](ALY6040-Module2-FinalProject-DraftReport-AbbyBridgers-JustinEhringhaus_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](ALY6040-Module2-FinalProject-FinalReport-AbbyBridgers-JustinEhringhaus_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
 The decision tree boiled all variables down to just several splits. The
 path to being classified as an “Immigrant” (2) can be read as follows:
@@ -681,7 +804,7 @@ head(train)
 ```
 
     ## # A tibble: 6 × 3
-    ##   Immigrants.As.Neighbors Tolerance.Important.For.Children Immigration.Increas…¹
+    ##   Immigrants.As.Neighbors Tolerance.Important.For.Children Immigration.Increase…
     ##                     <dbl>                            <dbl>                 <dbl>
     ## 1                       2                                2                     2
     ## 2                       2                                1                     2
@@ -689,7 +812,6 @@ head(train)
     ## 4                       2                                1                     2
     ## 5                       2                                1                     2
     ## 6                       2                                1                     2
-    ## # … with abbreviated variable name ¹​Immigration.Increases.Terrorism.Risk
 
 ``` r
 # tree plotting
@@ -709,7 +831,7 @@ library(rpart.plot)
 fancyRpartPlot(tolerance_tree, main = "Decision Tree #2: Importance of Teaching Tolerance,\nBased on Beliefs about Immigration", caption = "Tolerance is Important (1) versus Nonimportant (2)", type = 5)
 ```
 
-![](ALY6040-Module2-FinalProject-DraftReport-AbbyBridgers-JustinEhringhaus_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](ALY6040-Module2-FinalProject-FinalReport-AbbyBridgers-JustinEhringhaus_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
 ``` r
 # Immigrants as neighbors: 1 = wouldn't like  2 = didn't mention
@@ -863,7 +985,7 @@ fancyRpartPlot(religion_tree_model,
                type = 5)
 ```
 
-![](ALY6040-Module2-FinalProject-DraftReport-AbbyBridgers-JustinEhringhaus_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+![](ALY6040-Module2-FinalProject-FinalReport-AbbyBridgers-JustinEhringhaus_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 The decision tree boiled all variables down to just several splits. It
 even chose to take many of the possible religions out of the question,
@@ -977,7 +1099,7 @@ map_color_range(wvs_subset, wvs_subset$confidence.elections,
                 min_color = "green", max_color = "red")
 ```
 
-![](ALY6040-Module2-FinalProject-DraftReport-AbbyBridgers-JustinEhringhaus_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](ALY6040-Module2-FinalProject-FinalReport-AbbyBridgers-JustinEhringhaus_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 It appears overall we humans do not trust elections! Therefore, it’s
 worthwhile and interesting to assess the relationship, if any, between
@@ -1013,11 +1135,11 @@ fancyRpartPlot(four_model,
                type = 5)
 ```
 
-![](ALY6040-Module2-FinalProject-DraftReport-AbbyBridgers-JustinEhringhaus_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](ALY6040-Module2-FinalProject-FinalReport-AbbyBridgers-JustinEhringhaus_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 
 -   The response scale is the same among each of the variables included
-    in this decision tree. Confidence in courts and confidence in the
-    United Nations (UN) are used to predict confidence in elections.
+    in this decision tree. Confidence in courts and in the United
+    Nations (UN) are used to predict confidence in elections.
 
 **Confidence in Elections: Leaf Interpretation (L-R)**:
 
@@ -1187,14 +1309,14 @@ what makes a human a human.
 
 ## Recommendations & Conclusions
 
--   Next, we plan to integrate feedback from Professor Hodeghatta to our
-    final report and presentation.
--   We will be selecting aspects of our analysis to include in a
-    PowerPoint presentation for classmates next Wednesday, which will
-    require zeroing in on a select few analyses that are
-    visually-focused, namely graphs and decision tress.
--   Future analysis would touch on those issues that we were not able to
-    cover. These included the relationship between education completed
+-   Taking a worldwide perspective means that these findings paint
+    insights with the broadest of brushes, and this represents a kickoff
+    to a greater endeavor as opposed to being the ultimate source of
+    truth regarding worldwide values. Our next steps as consultants to
+    the WVS will require zeroing in on specific countries for more micro
+    values analysis.
+-   Future analysis will touch on those issues that we were not able to
+    cover. These include: the relationship between education completed
     (Q275) and the importance of leisure time (Q3); the relationship
     between income (Q288), happiness (Q46), and health (Q47); and the
     relationship between marital status (Q273) and political engagement
@@ -1215,6 +1337,15 @@ Haerpfer, Inglehart, C. n.d. “World Values Survey: Round Seven -
 Country-Pooled Datafile Version 4.0.”
 <http://dx.doi.org/10.14281/18241.18>.
 <https://doi.org/10.14281/18241.18>.
+
+</div>
+
+<div id="ref-ordinal" class="csl-entry">
+
+Robitzsch, A. n.d. “Why Ordinal Variables Can (Almost) Always Be Treated
+as Continuous Variables: Clarifying Assumptions of Robust Continuous and
+Ordinal Factor Analysis Estimation Methods.”
+<https://www.frontiersin.org/articles/10.3389/feduc.2020.589965/full>.
 
 </div>
 
