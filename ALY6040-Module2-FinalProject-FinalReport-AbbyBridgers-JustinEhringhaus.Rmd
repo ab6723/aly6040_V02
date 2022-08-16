@@ -12,6 +12,7 @@ nocite: '@*'
 
 ---
 
+
 ```{r setup, include=FALSE}
 # repo: https://github.com/ab6723/aly6040_V02
 knitr::opts_chunk$set(echo = TRUE)
@@ -38,6 +39,8 @@ p_load(caret)
 ##### Overview
 
 The World Values Survey (WVS) aims to understand the values, beliefs, and norms of people all over the world, comparatively and longitudinally. Operating in more than 120 countries and conducted every five years, the WVS uses a common questionnaire and a household interview format to investigate human beliefs. The data is made available in waves. Time series data including all waves pooled between 1981-2022 is also available.
+
+Our firm was contacted by the WVS and asked to complete a comprehensive data mining project using the latest available data. Our team was tasked with extracting deeper meaning from the data, and beginning to unlock answers to key questions related to some of the most timely conversations around values. These include but are not limited to immigration, religion, and LGBT acceptance. 
 
 While examining the pooled dataset would certainly be interesting to answer questions about changes in worldwide values, beliefs, and norms, we are opting to limit the scope of our project to recent years (Wave 7: 2017-2022). Already, the size and scope of this dataset represents a big step for our group's budding data analysts, as we have never yet worked with anything so large and so faceted. The Wave 7 dataset contains 552 variables and 87,822 rows. We have reduced the number of attributes by about 90%. More details to follow.
 
@@ -638,9 +641,8 @@ Humans are complex. We are moderately to extremely consistent on some things (e.
 
 ## Recommendations & Conclusions
 
-- Next, we plan to integrate feedback from Professor Hodeghatta to our final report and presentation.
-- We will be selecting aspects of our analysis to include in a PowerPoint presentation for classmates next Wednesday, which will require zeroing in on a select few analyses that are visually-focused, namely graphs and decision tress.
-- Future analysis would touch on those issues that we were not able to cover. These included the relationship between education completed (Q275) and the importance of leisure time (Q3); the relationship between income (Q288), happiness (Q46), and health (Q47); and the relationship between marital status (Q273) and political engagement (Q209 - Q222).
+- Taking a worldwide perspective means that these findings paint insights with the broadest of brushes, and this represents a kickoff to a greater endeavor as opposed to being the ultimate source of truth regarding worldwide values. Our next steps as consultants to the WVS will require zeroing in on specific countries for more micro values analysis. 
+- Future analysis will touch on those issues that we were not able to cover. These include: the relationship between education completed (Q275) and the importance of leisure time (Q3); the relationship between income (Q288), happiness (Q46), and health (Q47); and the relationship between marital status (Q273) and political engagement (Q209 - Q222).
 - Future analysis would include more advanced predictive modeling techniques, starting with random forests. We cannot know what we have not yet studied, but we would hope to find other useful modeling techniques beyond decision trees that pair well with ordinal (Likert) data!
 
 ## Works Cited
