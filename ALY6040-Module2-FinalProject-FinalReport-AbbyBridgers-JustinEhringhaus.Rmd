@@ -646,4 +646,3 @@ Humans are complex. We are moderately to extremely consistent on some things (e.
 - Future analysis would include more advanced predictive modeling techniques, starting with random forests. We cannot know what we have not yet studied, but we would hope to find other useful modeling techniques beyond decision trees that pair well with ordinal (Likert) data!
 
 ## Works Cited
-Robitzsch, A. (2020). *Why Ordinal Variables Can (Almost) Always Be Treated as Continuous Variables: Clarifying Assumptions of Robust Continuous and Ordinal Factor Analysis Estimation Methods.* Frontiers. https://www.frontiersin.org/articles/10.3389/feduc.2020.589965/full
