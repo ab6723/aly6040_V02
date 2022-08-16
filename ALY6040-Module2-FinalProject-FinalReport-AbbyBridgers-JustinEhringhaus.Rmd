@@ -578,7 +578,7 @@ fancyRpartPlot(four_model,
                type = 5)
 ```
 
-- The response scale is the same among each of the variables included in this decision tree. Confidence in courts and confidence in the United Nations (UN) are used to predict confidence in elections. 
+- The response scale is the same among each of the variables included in this decision tree. Confidence in courts and in the United Nations (UN) are used to predict confidence in elections. 
 
 **Confidence in Elections: Leaf Interpretation (L-R)**:
 
