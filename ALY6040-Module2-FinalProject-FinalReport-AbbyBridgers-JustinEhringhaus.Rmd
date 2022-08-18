@@ -136,6 +136,11 @@ wvs_subset <-
 
 ```{r}
 myskim <- skim(wvs_subset)
+myskim <- 
+  myskim %>% 
+  select(-character.whitespace, -character.min, 
+         -character.max, -character.empty, -character.n_unique,
+         -starts_with('numeric.p'))
 myskim
 ```
 
